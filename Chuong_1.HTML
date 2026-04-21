@@ -1,0 +1,3490 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MMT – Chương 1: Luyện Tập Trắc Nghiệm</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0a0e1a;
+        --surface: #111827;
+        --surface2: #1a2235;
+        --border: #1e2d45;
+        --accent: #00d4ff;
+        --accent2: #7c3aed;
+        --accent3: #10b981;
+        --danger: #ef4444;
+        --text: #e2e8f0;
+        --text2: #94a3b8;
+        --text3: #64748b;
+        --correct: #10b981;
+        --wrong: #ef4444;
+        --glow: 0 0 20px rgba(0, 212, 255, 0.15);
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Be Vietnam Pro", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        background-image:
+          radial-gradient(
+            ellipse at 10% 20%,
+            rgba(0, 212, 255, 0.04) 0%,
+            transparent 60%
+          ),
+          radial-gradient(
+            ellipse at 90% 80%,
+            rgba(124, 58, 237, 0.05) 0%,
+            transparent 60%
+          );
+      }
+      /* ── Header ── */
+      .header {
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        padding: 16px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        backdrop-filter: blur(12px);
+      }
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .logo-badge {
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        color: #fff;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 6px;
+        letter-spacing: 0.5px;
+      }
+      .header-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--text);
+      }
+      .header-sub {
+        font-size: 12px;
+        color: var(--text3);
+        font-family: "JetBrains Mono", monospace;
+      }
+      .score-badge {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 8px 16px;
+      }
+      .score-num {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--accent);
+      }
+      .score-label {
+        font-size: 11px;
+        color: var(--text3);
+      }
+
+      /* ── Progress ── */
+      .progress-wrap {
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        padding: 10px 24px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .progress-bar-bg {
+        flex: 1;
+        height: 5px;
+        background: var(--border);
+        border-radius: 99px;
+        overflow: hidden;
+      }
+      .progress-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+        border-radius: 99px;
+        transition: width 0.4s ease;
+      }
+      .progress-text {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        color: var(--text3);
+        white-space: nowrap;
+      }
+
+      /* ── Main ── */
+      .main {
+        max-width: 820px;
+        margin: 0 auto;
+        padding: 32px 20px 80px;
+      }
+
+      /* ── Topic Tag ── */
+      .topic-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(0, 212, 255, 0.08);
+        border: 1px solid rgba(0, 212, 255, 0.2);
+        color: var(--accent);
+        font-size: 11px;
+        font-weight: 600;
+        font-family: "JetBrains Mono", monospace;
+        padding: 4px 12px;
+        border-radius: 99px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 20px;
+      }
+
+      /* ── Question Card ── */
+      .question-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 32px;
+        margin-bottom: 20px;
+        box-shadow: var(--glow);
+        transition: border-color 0.3s;
+        animation: fadeSlide 0.35s ease;
+      }
+      @keyframes fadeSlide {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .question-num {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        color: var(--text3);
+        margin-bottom: 12px;
+      }
+      .question-text {
+        font-size: 17px;
+        font-weight: 600;
+        line-height: 1.65;
+        color: var(--text);
+      }
+
+      /* ── Options ── */
+      .options {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 24px;
+      }
+      .option-btn {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        background: var(--surface2);
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        padding: 14px 18px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: left;
+        font-family: "Be Vietnam Pro", sans-serif;
+        color: var(--text);
+        font-size: 15px;
+        line-height: 1.5;
+      }
+      .option-btn:hover:not(:disabled) {
+        border-color: var(--accent);
+        background: rgba(0, 212, 255, 0.06);
+        transform: translateX(4px);
+      }
+      .option-letter {
+        flex-shrink: 0;
+        width: 28px;
+        height: 28px;
+        background: var(--border);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text2);
+        transition: all 0.2s;
+      }
+      .option-btn.correct {
+        border-color: var(--correct);
+        background: rgba(16, 185, 129, 0.08);
+      }
+      .option-btn.correct .option-letter {
+        background: var(--correct);
+        color: #fff;
+      }
+      .option-btn.wrong {
+        border-color: var(--wrong);
+        background: rgba(239, 68, 68, 0.08);
+      }
+      .option-btn.wrong .option-letter {
+        background: var(--wrong);
+        color: #fff;
+      }
+      .option-btn.correct-reveal {
+        border-color: var(--correct);
+        background: rgba(16, 185, 129, 0.05);
+      }
+      .option-btn.correct-reveal .option-letter {
+        background: var(--correct);
+        color: #fff;
+      }
+      .option-btn:disabled {
+        cursor: default;
+      }
+
+      /* ── Feedback ── */
+      .feedback {
+        margin-top: 20px;
+        padding: 14px 18px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        animation: fadeIn 0.25s ease;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      .feedback.correct {
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.25);
+        color: var(--correct);
+      }
+      .feedback.wrong {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.25);
+        color: var(--wrong);
+      }
+      .feedback-icon {
+        font-size: 18px;
+      }
+
+      /* ── Controls ── */
+      .controls {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 24px;
+      }
+      .btn-next {
+        background: linear-gradient(135deg, var(--accent), #0099cc);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 28px;
+        font-family: "Be Vietnam Pro", sans-serif;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+        flex: 1;
+      }
+      .btn-next:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 25px rgba(0, 212, 255, 0.25);
+      }
+      .btn-skip {
+        background: var(--surface2);
+        color: var(--text2);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 12px 22px;
+        font-family: "Be Vietnam Pro", sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .btn-skip:hover {
+        border-color: var(--text3);
+        color: var(--text);
+      }
+
+      /* ── Filters ── */
+      .filter-wrap {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 24px;
+      }
+      .filter-btn {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        color: var(--text3);
+        border-radius: 99px;
+        padding: 6px 14px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: "Be Vietnam Pro", sans-serif;
+        transition: all 0.2s;
+      }
+      .filter-btn:hover,
+      .filter-btn.active {
+        background: rgba(0, 212, 255, 0.08);
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      /* ── Summary Screen ── */
+      .summary-screen {
+        text-align: center;
+        padding: 60px 20px;
+        animation: fadeSlide 0.5s ease;
+      }
+      .summary-circle {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        border: 4px solid var(--accent);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 32px;
+        background: rgba(0, 212, 255, 0.05);
+        box-shadow: 0 0 40px rgba(0, 212, 255, 0.15);
+      }
+      .summary-pct {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 36px;
+        font-weight: 600;
+        color: var(--accent);
+      }
+      .summary-title {
+        font-size: 26px;
+        font-weight: 800;
+        margin-bottom: 12px;
+      }
+      .summary-sub {
+        color: var(--text2);
+        font-size: 15px;
+        margin-bottom: 32px;
+      }
+      .summary-stats {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 36px;
+      }
+      .stat-box {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 16px 24px;
+        min-width: 120px;
+      }
+      .stat-num {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 28px;
+        font-weight: 700;
+      }
+      .stat-num.g {
+        color: var(--correct);
+      }
+      .stat-num.r {
+        color: var(--wrong);
+      }
+      .stat-num.b {
+        color: var(--accent);
+      }
+      .stat-lbl {
+        font-size: 12px;
+        color: var(--text3);
+        margin-top: 4px;
+      }
+      .btn-restart {
+        background: linear-gradient(135deg, var(--accent2), var(--accent));
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        padding: 14px 36px;
+        font-family: "Be Vietnam Pro", sans-serif;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+        margin: 6px;
+      }
+      .btn-restart:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+      }
+
+      /* ── Home Screen ── */
+      .home-screen {
+        text-align: center;
+        padding: 50px 20px;
+        animation: fadeSlide 0.5s ease;
+      }
+      .home-title {
+        font-size: 34px;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 10px;
+      }
+      .home-sub {
+        color: var(--text2);
+        font-size: 16px;
+        margin-bottom: 40px;
+        line-height: 1.6;
+      }
+      .mode-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        max-width: 600px;
+        margin: 0 auto 36px;
+      }
+      .mode-card {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: 14px;
+        padding: 24px 20px;
+        cursor: pointer;
+        transition: all 0.25s;
+        text-align: left;
+      }
+      .mode-card:hover {
+        border-color: var(--accent);
+        transform: translateY(-3px);
+        box-shadow: 0 12px 35px rgba(0, 212, 255, 0.1);
+      }
+      .mode-card.selected {
+        border-color: var(--accent);
+        background: rgba(0, 212, 255, 0.06);
+      }
+      .mode-icon {
+        font-size: 28px;
+        margin-bottom: 10px;
+      }
+      .mode-name {
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 6px;
+      }
+      .mode-desc {
+        font-size: 13px;
+        color: var(--text2);
+        line-height: 1.5;
+      }
+      .topic-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 10px;
+        max-width: 700px;
+        margin: 0 auto 36px;
+        text-align: left;
+      }
+      .topic-card {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: 10px;
+        padding: 14px 16px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .topic-card:hover {
+        border-color: var(--accent);
+        background: rgba(0, 212, 255, 0.04);
+      }
+      .topic-card.selected {
+        border-color: var(--accent2);
+        background: rgba(124, 58, 237, 0.06);
+      }
+      .topic-card-name {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+      .topic-card-count {
+        font-size: 11px;
+        color: var(--text3);
+        font-family: "JetBrains Mono", monospace;
+      }
+      .btn-start {
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        padding: 15px 48px;
+        font-size: 17px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: "Be Vietnam Pro", sans-serif;
+      }
+      .btn-start:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 35px rgba(0, 212, 255, 0.25);
+      }
+      .section-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text2);
+        text-align: left;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      @media (max-width: 600px) {
+        .mode-grid {
+          grid-template-columns: 1fr;
+        }
+        .header {
+          flex-direction: column;
+          gap: 10px;
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="header-left">
+        <span class="logo-badge">MMT</span>
+        <div>
+          <div class="header-title">Mạng Máy Tính – Chương 1</div>
+          <div class="header-sub">
+            ĐH Kinh tế Quốc dân · Tổng quan MMT & TSL
+          </div>
+        </div>
+      </div>
+      <div class="score-badge" id="scoreDisplay" style="display: none">
+        <div>
+          <div class="score-num" id="scoreNum">0/0</div>
+          <div class="score-label">Điểm số</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-wrap" id="progressWrap" style="display: none">
+      <div class="progress-bar-bg">
+        <div
+          class="progress-bar-fill"
+          id="progressFill"
+          style="width: 0%"
+        ></div>
+      </div>
+      <div class="progress-text" id="progressText">0 / 0</div>
+    </div>
+
+    <div class="main" id="appRoot"></div>
+
+    <script>
+      // ─────────────────────────────────────────────
+      // QUESTION BANK – 500 câu
+      // ─────────────────────────────────────────────
+      const QUESTIONS = [
+        // ── PHẦN 1: KHÁI NIỆM CƠ BẢN (1-50) ──────────
+        {
+          t: "Khái niệm cơ bản",
+          q: "Mạng máy tính (Computer Network) được định nghĩa là:",
+          a: [
+            "Một máy tính có hiệu năng rất cao kết nối Internet",
+            "Hệ thống gồm các máy tính đơn lẻ kết nối qua đường truyền vật lý theo kiến trúc mạng xác định, có khả năng trao đổi thông tin",
+            "Tập hợp các phần mềm dùng để chia sẻ dữ liệu giữa hai máy tính",
+            "Một giao thức truyền thông giữa hai hoặc nhiều thiết bị điện tử",
+          ],
+          c: 1,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Trong mạng máy tính, các máy tính đơn lẻ còn được gọi là:",
+          a: [
+            "Thiết bị trung gian",
+            "Bộ định tuyến",
+            "Nút mạng (Network Node)",
+            "Cổng mạng",
+          ],
+          c: 2,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Đường truyền vật lý hữu tuyến bao gồm loại nào sau đây?",
+          a: [
+            "Sóng hồng ngoại và viba",
+            "Vệ tinh và sóng vi ba",
+            "Cáp xoắn đôi, cáp quang, cáp đồng trục",
+            "Sóng điện từ và sóng vô tuyến",
+          ],
+          c: 2,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Đường truyền vật lý vô tuyến bao gồm:",
+          a: [
+            "Cáp xoắn đôi và cáp quang",
+            "Cáp đồng trục và cáp quang",
+            "Cáp UTP và cáp STP",
+            "Sóng hồng ngoại, viba, vệ tinh",
+          ],
+          c: 3,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Kiến trúc mạng (Network Architecture) là gì?",
+          a: [
+            "Thiết kế vật lý của các thiết bị phần cứng mạng",
+            "Cách thức kết nối và trao đổi thông tin trong mạng",
+            "Phần mềm điều hành hệ thống mạng",
+            "Sơ đồ bố trí phòng máy chủ",
+          ],
+          c: 1,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Hình trạng mạng (Topology) mô tả điều gì?",
+          a: [
+            "Giao thức truyền thông giữa các nút mạng",
+            "Cách thức các nút mạng kết nối với nhau",
+            "Tốc độ truyền dữ liệu trong mạng",
+            "Số lượng thiết bị tối đa trong mạng",
+          ],
+          c: 1,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Giao thức mạng (Protocol) là:",
+          a: [
+            "Thiết bị phần cứng dùng để kết nối các mạng",
+            "Cách thức các nút mạng trao đổi thông tin với nhau",
+            "Hình dạng vật lý của đường cáp mạng",
+            "Bộ nhớ dùng lưu trữ dữ liệu tạm thời",
+          ],
+          c: 1,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Hai thành phần cơ bản tạo nên kiến trúc mạng là:",
+          a: [
+            "Server và Client",
+            "Hình trạng mạng (Topology) và Giao thức mạng (Protocol)",
+            "Phần cứng và Phần mềm",
+            "LAN và WAN",
+          ],
+          c: 1,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Loại phương tiện truyền thông nào sử dụng xung ánh sáng?",
+          a: [
+            "Dây kim loại trong cáp",
+            "Truyền dẫn không dây",
+            "Sợi thủy tinh hoặc plastic bên trong cáp (cáp quang)",
+            "Cáp đồng trục",
+          ],
+          c: 2,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Loại phương tiện truyền thông nào sử dụng điều chế tần số của sóng điện từ?",
+          a: [
+            "Cáp quang",
+            "Dây kim loại trong cáp",
+            "Cáp xoắn đôi",
+            "Truyền dẫn không dây",
+          ],
+          c: 3,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Lợi ích nào sau đây KHÔNG phải lợi ích của mạng máy tính?",
+          a: [
+            "Chia sẻ tài nguyên chung không phụ thuộc vị trí địa lý",
+            "Tạo môi trường giao tiếp và trao đổi thông tin",
+            "Tăng hiệu năng xử lý của từng máy tính đơn lẻ",
+            "Nâng cao độ tin cậy nhờ khả năng thay thế khi có sự cố",
+          ],
+          c: 2,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Trong mạng máy tính, 'host' hay 'thiết bị đầu cuối' (end device) là:",
+          a: [
+            "Chỉ các máy chủ (servers)",
+            "Mỗi máy tính trên mạng",
+            "Chỉ các thiết bị định tuyến",
+            "Thiết bị trung gian trong mạng",
+          ],
+          c: 1,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Server trong mạng máy tính là:",
+          a: [
+            "Máy tính gửi yêu cầu đến máy khác để lấy thông tin",
+            "Thiết bị trung gian kết nối các mạng LAN",
+            "Máy tính cung cấp thông tin cho các thiết bị đầu cuối",
+            "Thiết bị phát sóng không dây",
+          ],
+          c: 2,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Client trong mạng máy tính là:",
+          a: [
+            "Máy tính cung cấp dịch vụ cho các thiết bị khác",
+            "Máy tính gửi yêu cầu đến máy chủ để lấy thông tin",
+            "Thiết bị lưu trữ dữ liệu trung tâm",
+            "Bộ định tuyến trong mạng WAN",
+          ],
+          c: 1,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Trong mạng Peer-to-Peer, một thiết bị có thể đóng vai trò:",
+          a: [
+            "Chỉ là server",
+            "Chỉ là client",
+            "Cả client và server",
+            "Chỉ là thiết bị trung gian",
+          ],
+          c: 2,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Mạng ngang hàng (Peer-to-Peer) được khuyến nghị cho loại mạng nào?",
+          a: [
+            "Mạng doanh nghiệp lớn",
+            "Mạng toàn quốc",
+            "Các mạng rất nhỏ",
+            "Mạng WAN",
+          ],
+          c: 2,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Nhược điểm nào sau đây thuộc mạng Peer-to-Peer?",
+          a: [
+            "Chi phí cao",
+            "Khó cài đặt",
+            "Quản trị không tập trung, không secure, không scalable",
+            "Yêu cầu phần cứng chuyên dụng",
+          ],
+          c: 2,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Ưu điểm của mạng Peer-to-Peer là:",
+          a: [
+            "Bảo mật cao, quản trị tập trung",
+            "Dễ cài đặt, chi phí thấp, ít phức tạp",
+            "Hiệu năng cao, scalable tốt",
+            "Thích hợp cho mạng doanh nghiệp lớn",
+          ],
+          c: 1,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Thiết bị đầu cuối (end device) là:",
+          a: [
+            "Thiết bị định tuyến dữ liệu trong mạng",
+            "Nơi tin nhắn bắt nguồn hoặc nơi tin nhắn được nhận",
+            "Thiết bị kết nối hai mạng LAN",
+            "Cổng vào/ra của mạng WAN",
+          ],
+          c: 1,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Thiết bị mạng trung gian (Intermediary Network Device) có chức năng gì?",
+          a: [
+            "Lưu trữ dữ liệu người dùng",
+            "Kết nối các thiết bị đầu cuối và quản lý dữ liệu khi truyền qua mạng",
+            "Cung cấp giao diện người dùng",
+            "Phân tích nội dung dữ liệu",
+          ],
+          c: 1,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Ví dụ nào sau đây là thiết bị mạng trung gian?",
+          a: [
+            "PC, laptop, điện thoại thông minh",
+            "Switch, wireless access point, router, firewall",
+            "Màn hình và bàn phím",
+            "Máy in mạng",
+          ],
+          c: 1,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Thiết bị trung gian thực hiện chức năng nào sau đây?",
+          a: [
+            "Chỉ kết nối vật lý các máy tính",
+            "Tái tạo và truyền lại tín hiệu, duy trì thông tin về tuyến đường, thông báo lỗi",
+            "Lưu trữ dữ liệu người dùng dài hạn",
+            "Cung cấp giao diện đồ họa",
+          ],
+          c: 1,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Kênh (Channel) trong truyền thông mạng là gì?",
+          a: [
+            "Tốc độ truyền dữ liệu",
+            "Phương tiện cung cấp đường dẫn mà thông điệp đi từ nguồn đến đích",
+            "Địa chỉ IP của thiết bị nhận",
+            "Giao thức kiểm soát lỗi",
+          ],
+          c: 1,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Dữ liệu trong mạng truyền từ:",
+          a: [
+            "Thiết bị đầu cuối → thiết bị trung gian → thiết bị đầu cuối",
+            "Server → Server",
+            "Client → Client",
+            "ISP → User",
+          ],
+          c: 0,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "NIC là viết tắt của:",
+          a: [
+            "Network Internet Card",
+            "Network Interface Card",
+            "Node Internet Connection",
+            "Network Information Center",
+          ],
+          c: 1,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Mạng máy tính mang lại lợi ích nào về mặt kinh tế?",
+          a: [
+            "Tăng số lượng máy in và đĩa cứng cần thiết",
+            "Giảm số lượng máy in, đĩa cứng và các thiết bị khác nhờ chia sẻ",
+            "Tăng chi phí phần cứng tổng thể",
+            "Tăng số lượng nhân viên IT cần thiết",
+          ],
+          c: 1,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Mạng hình sao mở rộng là:",
+          a: [
+            "Mạng Star kết nối trực tiếp với Internet",
+            "Sự kết hợp giữa các mạng hình sao thông qua kết nối HUB hoặc Switch",
+            "Mạng Bus kết nối với mạng Star",
+            "Mạng Ring mở rộng theo hình sao",
+          ],
+          c: 1,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Ưu điểm chính của mạng hình sao mở rộng là:",
+          a: [
+            "Không cần thiết bị trung tâm",
+            "Có thể mở rộng khoảng cách hay độ lớn của mạng hình sao",
+            "Tốc độ truyền nhanh hơn mạng Bus",
+            "Chi phí thấp hơn mạng Ring",
+          ],
+          c: 1,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Mục đích cơ bản của hệ thống truyền thông là:",
+          a: [
+            "Lưu trữ dữ liệu lâu dài",
+            "Trao đổi dữ liệu giữa hai thực thể",
+            "Bảo mật thông tin người dùng",
+            "Tăng tốc độ xử lý máy tính",
+          ],
+          c: 1,
+        },
+        {
+          t: "Khái niệm cơ bản",
+          q: "Trong mạng có ba loại phương tiện truyền thông chính, KHÔNG bao gồm:",
+          a: [
+            "Dây kim loại trong cáp",
+            "Sợi thủy tinh hoặc plastic",
+            "Truyền dẫn không dây",
+            "Đĩa quang học",
+          ],
+          c: 3,
+        },
+
+        // ── PHẦN 2: TOPOLOGY (31-80) ──────────────────
+        {
+          t: "Hình trạng mạng",
+          q: "Trong mạng dạng sao (Star Topology), điều gì xảy ra khi thiết bị trung tâm bị hỏng?",
+          a: [
+            "Mạng vẫn hoạt động bình thường",
+            "Chỉ một phần mạng ngừng hoạt động",
+            "Toàn bộ hệ thống mạng không thể hoạt động",
+            "Các nút tự kết nối trực tiếp với nhau",
+          ],
+          c: 2,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Khoảng cách kết nối tối đa từ thiết bị đến thiết bị trung tâm trong mạng Star thường là:",
+          a: ["10m", "50m", "100m", "500m"],
+          c: 2,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Ưu điểm nào sau đây thuộc về mạng dạng sao (Star Topology)?",
+          a: [
+            "Chi phí cáp thấp nhất trong các loại topology",
+            "Không phụ thuộc vào thiết bị trung tâm",
+            "Mạng hoạt động bình thường khi một nút mạng bị hư hỏng",
+            "Dễ phát hiện lỗi trên đường truyền",
+          ],
+          c: 2,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Trong mạng dạng trục (Bus Topology), hai đầu dây cáp được bịt kín bằng thiết bị gì?",
+          a: ["Hub", "Switch", "Terminator", "Router"],
+          c: 2,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Ưu điểm của mạng Bus Topology là:",
+          a: [
+            "Dễ phát hiện và sửa lỗi",
+            "Tiết kiệm chiều dài dây cáp và dễ lắp đặt",
+            "Tốc độ truyền nhanh nhất",
+            "Không bị ùn tắc dữ liệu",
+          ],
+          c: 1,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Nhược điểm của mạng Bus Topology là:",
+          a: [
+            "Cần nhiều dây cáp",
+            "Phụ thuộc vào thiết bị trung tâm",
+            "Khi một đoạn cáp hỏng, toàn bộ hệ thống ngừng hoạt động và rất khó phát hiện lỗi",
+            "Tốc độ chậm nhất trong các loại topology",
+          ],
+          c: 2,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Trong mạng Bus, hiện tượng ùn tắc giao thông dễ xảy ra khi nào?",
+          a: [
+            "Mạng có ít thiết bị kết nối",
+            "Truyền dữ liệu lưu lượng lớn",
+            "Thiết bị trung tâm bị hỏng",
+            "Đường cáp quá ngắn",
+          ],
+          c: 1,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Trong mạng dạng vòng (Ring Topology), tín hiệu di chuyển như thế nào?",
+          a: [
+            "Tỏa ra từ trung tâm đến tất cả nút",
+            "Chạy quanh theo một chiều xác định",
+            "Truyền theo đường thẳng từ đầu đến cuối",
+            "Truyền đồng thời theo cả hai chiều",
+          ],
+          c: 1,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Ưu điểm của mạng Ring Topology so với Bus là:",
+          a: [
+            "Chi phí thấp hơn",
+            "Tốc độ nhanh hơn và có thể nới rộng khoảng cách xa hơn",
+            "Dễ phát hiện lỗi hơn",
+            "Không bị ngừng khi có sự cố",
+          ],
+          c: 1,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Nhược điểm của mạng Ring Topology là:",
+          a: [
+            "Cần thiết bị trung tâm đắt tiền",
+            "Khi cáp có sự cố, toàn bộ mạng ngưng hoạt động và khó kiểm tra lỗi",
+            "Tiêu tốn quá nhiều dây cáp",
+            "Không thể mở rộng",
+          ],
+          c: 1,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Mạng Ring Topology trong thực tế:",
+          a: [
+            "Được sử dụng rộng rãi nhất",
+            "Là cấu trúc phổ biến của Internet",
+            "Ít được sử dụng",
+            "Là chuẩn mặc định cho mạng doanh nghiệp",
+          ],
+          c: 2,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Mạng dạng lưới (Mesh Topology) thường ứng dụng trong:",
+          a: [
+            "Mạng gia đình nhỏ",
+            "Mạng quan trọng không thể ngừng hoạt động như nhà máy điện nguyên tử, an ninh quốc phòng",
+            "Mạng văn phòng thông thường",
+            "Mạng trường học",
+          ],
+          c: 1,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Đặc điểm của mạng Mesh Topology là:",
+          a: [
+            "Mỗi thiết bị chỉ kết nối với thiết bị trung tâm",
+            "Mỗi thiết bị kết nối với tất cả các thiết bị còn lại",
+            "Các thiết bị kết nối thành vòng khép kín",
+            "Tất cả thiết bị kết nối vào một đường truyền chung",
+          ],
+          c: 1,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Cấu trúc quen thuộc của mạng Internet là loại topology nào?",
+          a: [
+            "Star Topology",
+            "Bus Topology",
+            "Ring Topology",
+            "Mesh Topology",
+          ],
+          c: 3,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Topology logic kiểu điểm – điểm (Point to Point) có đặc điểm:",
+          a: [
+            "Tất cả các node cùng truy nhập trên một đường truyền",
+            "Một kênh truyền vật lý được thiết lập giữa 2 node có nhu cầu trao đổi",
+            "Tín hiệu phát sóng đến tất cả node",
+            "Không cần thiết lập kênh truyền trước",
+          ],
+          c: 1,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Cấu trúc điểm-điểm còn được gọi là:",
+          a: [
+            "Mạng chuyển mạch kênh",
+            "Mạng lưu và gửi tiếp (Store-and-Forward)",
+            "Mạng quảng bá",
+            "Mạng chuyển mạch gói",
+          ],
+          c: 1,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Nhược điểm của Topology logic kiểu điểm-điểm là:",
+          a: [
+            "Khả năng xung đột thông tin cao",
+            "Hiệu suất sử dụng đường truyền thấp, độ trễ lớn, chiếm nhiều tài nguyên",
+            "Không thể thiết lập liên kết riêng",
+            "Không hỗ trợ truyền đa điểm",
+          ],
+          c: 1,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Ưu điểm của Topology logic kiểu điểm-điểm là:",
+          a: [
+            "Hiệu suất sử dụng đường truyền cao",
+            "Tốc độ trao đổi thông tin cao",
+            "Khả năng xung đột thông tin (Collision) thấp",
+            "Chi phí thấp",
+          ],
+          c: 2,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Topology logic kiểu điểm – đa điểm (Point to Multipoint) còn gọi là:",
+          a: [
+            "Mạng điểm-điểm",
+            "Mạng quảng bá (Broadcast)",
+            "Mạng lưu và chuyển tiếp",
+            "Mạng chuyển mạch kênh",
+          ],
+          c: 1,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Trong topology điểm-đa điểm, khi một node truyền thông điệp thì:",
+          a: [
+            "Chỉ node đích nhận được",
+            "Tất cả các node còn lại tiếp nhận và kiểm tra địa chỉ đích",
+            "Thiết bị trung tâm quyết định ai nhận",
+            "Thông điệp bị mã hóa và chỉ node đích giải mã được",
+          ],
+          c: 1,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Vấn đề cần giải quyết trong mạng Bus và Ring là:",
+          a: [
+            "Địa chỉ IP trùng lặp",
+            "Xung đột thông tin (Collision) hay tắc nghẽn trên đường truyền",
+            "Bảo mật dữ liệu",
+            "Cấu hình thiết bị trung tâm",
+          ],
+          c: 1,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Physical topology diagrams minh họa điều gì?",
+          a: [
+            "Địa chỉ logic và sơ đồ địa chỉ mạng",
+            "Vị trí vật lý của thiết bị trung gian và lắp đặt cáp",
+            "Giao thức được sử dụng trong mạng",
+            "Tốc độ truyền dữ liệu của từng liên kết",
+          ],
+          c: 1,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Logical topology diagrams minh họa điều gì?",
+          a: [
+            "Vị trí vật lý của các thiết bị trong phòng máy chủ",
+            "Các thiết bị, cổng và sơ đồ địa chỉ của mạng",
+            "Khoảng cách vật lý giữa các thiết bị",
+            "Loại cáp được sử dụng",
+          ],
+          c: 1,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Topology vật lý dựa trên:",
+          a: [
+            "Cách thức truyền tín hiệu",
+            "Cách kết nối vật lý (Bus, Ring, Star, Mesh)",
+            "Giao thức truyền thông",
+            "Địa chỉ IP của các nút",
+          ],
+          c: 1,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Topology logic dựa trên:",
+          a: [
+            "Cách kết nối vật lý dây cáp",
+            "Cách thức truyền tín hiệu (Điểm-điểm, Điểm-đa điểm)",
+            "Số lượng thiết bị trong mạng",
+            "Tốc độ đường truyền",
+          ],
+          c: 1,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Sơ đồ cấu trúc liên kết (topology diagram) là tài liệu bắt buộc vì:",
+          a: [
+            "Bắt buộc theo luật pháp",
+            "Cung cấp bản đồ trực quan về cách mạng được kết nối",
+            "Giúp tăng tốc độ mạng",
+            "Chứa thông tin bảo mật mạng",
+          ],
+          c: 1,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Thuật ngữ 'cổng' và 'giao diện' trong mạng thường:",
+          a: [
+            "Có ý nghĩa hoàn toàn khác nhau",
+            "Được sử dụng thay thế cho nhau",
+            "Chỉ dùng cho thiết bị wireless",
+            "Chỉ áp dụng cho router",
+          ],
+          c: 1,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Chức năng của node trung gian trong topology điểm-điểm là:",
+          a: [
+            "Chỉ kết nối vật lý",
+            "Tiếp nhận, lưu trữ tạm thời và gửi tiếp thông tin sang node tiếp theo khi đường truyền rỗi",
+            "Mã hóa và giải mã dữ liệu",
+            "Cung cấp địa chỉ IP cho các node",
+          ],
+          c: 1,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Mạng dạng sao có thể mở rộng hay thu hẹp dựa trên:",
+          a: [
+            "Khả năng của đường cáp",
+            "Nhu cầu sử dụng của User",
+            "Số lượng giao thức được hỗ trợ",
+            "Dung lượng đĩa cứng server",
+          ],
+          c: 1,
+        },
+        {
+          t: "Hình trạng mạng",
+          q: "Ưu điểm của mạng Ring so với Bus là:",
+          a: [
+            "Tốc độ nhanh hơn và tiết kiệm dây cáp hơn",
+            "Dễ lắp đặt hơn",
+            "Thiết bị trung tâm mạnh hơn",
+            "Không có xung đột dữ liệu",
+          ],
+          c: 0,
+        },
+
+        // ── PHẦN 3: KIẾN TRÚC MẠNG (81-130) ─────────
+        {
+          t: "Kiến trúc mạng",
+          q: "Có bao nhiêu đặc điểm cơ bản mà kiến trúc mạng cần giải quyết?",
+          a: ["2", "3", "4", "5"],
+          c: 2,
+        },
+        {
+          t: "Kiến trúc mạng",
+          q: "Bốn đặc điểm cơ bản của kiến trúc mạng là:",
+          a: [
+            "Tốc độ, Bảo mật, Giá thành, Hiệu năng",
+            "Khả năng chịu lỗi, Khả năng mở rộng, Chất lượng dịch vụ, Bảo mật mạng",
+            "Độ trễ, Băng thông, Bảo mật, Định tuyến",
+            "Vật lý, Logic, Phần mềm, Phần cứng",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc mạng",
+          q: "Fault Tolerance trong kiến trúc mạng có nghĩa là:",
+          a: [
+            "Mạng có thể chịu đựng tốc độ thấp",
+            "Mạng hạn chế tác động của lỗi bằng cách giới hạn số thiết bị bị ảnh hưởng",
+            "Mạng tự động sửa lỗi phần mềm",
+            "Mạng không bao giờ có lỗi",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc mạng",
+          q: "Để đảm bảo Fault Tolerance, mạng cần:",
+          a: [
+            "Một đường dẫn duy nhất nhưng rất nhanh",
+            "Nhiều đường dẫn (redundancy) và triển khai chuyển mạch gói",
+            "Một server dự phòng",
+            "Tường lửa mạnh",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc mạng",
+          q: "Chuyển mạch gói (Packet Switching) hỗ trợ Fault Tolerance vì:",
+          a: [
+            "Truyền dữ liệu nhanh hơn",
+            "Mỗi gói có thể đi theo con đường khác nhau đến đích",
+            "Chi phí thấp hơn",
+            "Không cần thiết bị định tuyến",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc mạng",
+          q: "Scalability trong kiến trúc mạng có nghĩa là:",
+          a: [
+            "Mạng có thể tự bảo vệ khỏi tấn công",
+            "Mạng có thể mở rộng nhanh chóng, hỗ trợ người dùng mới mà không ảnh hưởng hiệu suất hiện tại",
+            "Mạng đảm bảo chất lượng dịch vụ đồng đều",
+            "Mạng hoạt động ổn định khi có lỗi",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc mạng",
+          q: "Để đạt được Scalability, các nhà thiết kế mạng cần:",
+          a: [
+            "Mua thêm phần cứng đắt tiền",
+            "Tuân theo các tiêu chuẩn và giao thức được chấp nhận",
+            "Tăng tốc độ đường truyền",
+            "Giảm số lượng người dùng",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc mạng",
+          q: "QoS (Quality of Service) là cơ chế được sử dụng để:",
+          a: [
+            "Mã hóa dữ liệu truyền qua mạng",
+            "Phân bổ địa chỉ IP tự động",
+            "Đảm bảo phân phối nội dung đáng tin cậy cho tất cả người dùng",
+            "Theo dõi hoạt động của người dùng",
+          ],
+          c: 2,
+        },
+        {
+          t: "Kiến trúc mạng",
+          q: "QoS quan trọng nhất trong loại ứng dụng nào?",
+          a: [
+            "Truyền file văn bản",
+            "Gửi email",
+            "Truyền giọng nói và video trực tiếp",
+            "Duyệt web thông thường",
+          ],
+          c: 2,
+        },
+        {
+          t: "Kiến trúc mạng",
+          q: "Khi không cấu hình QoS và băng thông bị vượt quá, hậu quả là:",
+          a: [
+            "Mạng tự động ngắt kết nối",
+            "Video và âm thanh bị ngắt quãng, không mượt mà",
+            "Dữ liệu bị mất hoàn toàn",
+            "Thiết bị bị hỏng",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc mạng",
+          q: "Có mấy loại bảo mật mạng chính?",
+          a: ["1", "2", "3", "4"],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc mạng",
+          q: "Hai loại bảo mật mạng chính là:",
+          a: [
+            "Mật khẩu và Mã hóa",
+            "An ninh hạ tầng mạng và Bảo mật thông tin",
+            "Phần cứng và Phần mềm",
+            "Vật lý và Logic",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc mạng",
+          q: "An ninh hạ tầng mạng (Network Infrastructure Security) bao gồm:",
+          a: [
+            "Mã hóa dữ liệu truyền qua mạng",
+            "Bảo mật vật lý thiết bị và ngăn chặn truy cập trái phép vào thiết bị",
+            "Kiểm tra nội dung gói tin",
+            "Xác thực người dùng",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc mạng",
+          q: "Bảo mật thông tin (Information Security) trong mạng là:",
+          a: [
+            "Khóa vật lý các thiết bị mạng",
+            "Bảo vệ thông tin hoặc dữ liệu được truyền qua mạng",
+            "Giới hạn số lượng người dùng",
+            "Kiểm soát tốc độ truyền dữ liệu",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc mạng",
+          q: "Ba mục tiêu của bảo mật mạng là:",
+          a: [
+            "Tốc độ, Độ trễ, Băng thông",
+            "Bảo mật (Confidentiality), Toàn vẹn (Integrity), Khả dụng (Availability)",
+            "Mã hóa, Xác thực, Phân quyền",
+            "Tường lửa, VPN, IDS",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc mạng",
+          q: "Confidentiality (Bảo mật) trong bảo mật mạng nghĩa là:",
+          a: [
+            "Dữ liệu luôn sẵn sàng khi cần",
+            "Dữ liệu không bị thay đổi trong quá trình truyền",
+            "Chỉ những người nhận được chỉ định mới có thể đọc dữ liệu",
+            "Dữ liệu được sao lưu định kỳ",
+          ],
+          c: 2,
+        },
+        {
+          t: "Kiến trúc mạng",
+          q: "Integrity (Toàn vẹn) trong bảo mật mạng nghĩa là:",
+          a: [
+            "Dữ liệu không bị thay đổi trong quá trình truyền",
+            "Chỉ người được ủy quyền mới truy cập được dữ liệu",
+            "Dữ liệu luôn sẵn sàng cho người dùng",
+            "Dữ liệu được mã hóa an toàn",
+          ],
+          c: 0,
+        },
+        {
+          t: "Kiến trúc mạng",
+          q: "Availability (Khả dụng) trong bảo mật mạng nghĩa là:",
+          a: [
+            "Dữ liệu không bị thay đổi",
+            "Chỉ người có quyền mới đọc được dữ liệu",
+            "Đảm bảo truy cập dữ liệu kịp thời và đáng tin cậy cho người dùng được ủy quyền",
+            "Dữ liệu được sao lưu tự động",
+          ],
+          c: 2,
+        },
+        {
+          t: "Kiến trúc mạng",
+          q: "Kiến trúc mạng đề cập đến:",
+          a: [
+            "Thiết kế vật lý phòng máy chủ",
+            "Các công nghệ hỗ trợ cơ sở hạ tầng di chuyển dữ liệu trên mạng",
+            "Số lượng thiết bị trong mạng",
+            "Thương hiệu của thiết bị mạng",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc mạng",
+          q: "Bộ định tuyến có thể quản lý tốt luồng dữ liệu và lưu lượng thoại khi:",
+          a: [
+            "Băng thông đủ lớn",
+            "Có chính sách QoS được cấu hình",
+            "Mạng ở trạng thái idle",
+            "Số người dùng ít",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc mạng",
+          q: "Chuyển mạch kênh khác với chuyển mạch gói ở điểm nào trong Fault Tolerance?",
+          a: [
+            "Chuyển mạch kênh an toàn hơn",
+            "Chuyển mạch kênh thiết lập mạch chuyên dụng nên không hỗ trợ đa đường dẫn",
+            "Chuyển mạch gói chậm hơn",
+            "Chúng giống nhau về Fault Tolerance",
+          ],
+          c: 1,
+        },
+
+        // ── PHẦN 4: GIAO THỨC MẠNG (131-190) ─────────
+        {
+          t: "Giao thức mạng",
+          q: "Ba yếu tố cho bất kỳ truyền thông nào là:",
+          a: [
+            "Tốc độ, Độ trễ, Băng thông",
+            "Nguồn tin nhắn, Đích tin nhắn, Kênh truyền",
+            "Mã hóa, Giải mã, Xác thực",
+            "Phần cứng, Phần mềm, Giao thức",
+          ],
+          c: 1,
+        },
+        {
+          t: "Giao thức mạng",
+          q: "Giao thức truyền thông (Communications Protocols) được định nghĩa là:",
+          a: [
+            "Phần mềm cài đặt trên máy chủ",
+            "Các quy tắc điều chỉnh việc gửi và nhận tin nhắn",
+            "Thiết bị phần cứng kết nối mạng",
+            "Địa chỉ vật lý của thiết bị mạng",
+          ],
+          c: 1,
+        },
+        {
+          t: "Giao thức mạng",
+          q: "Mã hóa thông điệp (Message Encoding) là:",
+          a: [
+            "Mã hóa bảo mật để ngăn nghe lén",
+            "Quá trình chuyển đổi thông tin thành dạng khác có thể chấp nhận được để truyền đi",
+            "Thêm chữ ký số vào thông điệp",
+            "Nén dữ liệu để tiết kiệm băng thông",
+          ],
+          c: 1,
+        },
+        {
+          t: "Giao thức mạng",
+          q: "Giải mã (Decoding) là:",
+          a: [
+            "Quá trình mã hóa bảo mật",
+            "Quá trình ngược lại của mã hóa để diễn giải thông tin",
+            "Nén dữ liệu",
+            "Thêm header vào gói tin",
+          ],
+          c: 1,
+        },
+        {
+          t: "Giao thức mạng",
+          q: "Một bước đầu tiên quan trọng khi gửi tin nhắn là:",
+          a: [
+            "Xác định băng thông",
+            "Mã hóa (encoding)",
+            "Thiết lập địa chỉ IP",
+            "Cấu hình cổng",
+          ],
+          c: 1,
+        },
+        {
+          t: "Giao thức mạng",
+          q: "Định dạng tin nhắn phụ thuộc vào:",
+          a: [
+            "Tốc độ đường truyền",
+            "Loại tin nhắn và kênh được sử dụng",
+            "Số lượng người nhận",
+            "Địa chỉ IP đích",
+          ],
+          c: 1,
+        },
+        {
+          t: "Giao thức mạng",
+          q: "Yêu cầu nào sau đây KHÔNG thuộc về giao thức mạng?",
+          a: [
+            "Người gửi và người nhận được xác định",
+            "Ngôn ngữ và ngữ pháp chung",
+            "Tốc độ và thời gian phân phối",
+            "Màu sắc của giao diện người dùng",
+          ],
+          c: 3,
+        },
+        {
+          t: "Giao thức mạng",
+          q: "Các yêu cầu của giao thức mạng bao gồm:",
+          a: [
+            "Mã hóa, định dạng và đóng gói, kích thước, thời gian, tùy chọn phân phối thông điệp",
+            "Màu sắc, font chữ, layout giao diện",
+            "Tốc độ xử lý CPU, dung lượng RAM",
+            "Loại cáp và khoảng cách truyền",
+          ],
+          c: 0,
+        },
+        {
+          t: "Giao thức mạng",
+          q: "Kiểm soát luồng (Flow Control) là:",
+          a: [
+            "Kiểm soát ai được quyền truy cập mạng",
+            "Quá trình quản lý tốc độ truyền dữ liệu",
+            "Kiểm soát nội dung thông điệp",
+            "Kiểm soát địa chỉ mạng",
+          ],
+          c: 1,
+        },
+        {
+          t: "Giao thức mạng",
+          q: "Response Timeout (Hết thời gian trả lời) xảy ra khi:",
+          a: [
+            "Thiết bị không có đủ băng thông",
+            "Không nhận được câu trả lời trong khoảng thời gian chấp nhận được",
+            "Thiết bị bị ngắt kết nối vật lý",
+            "Dữ liệu bị mã hóa sai",
+          ],
+          c: 1,
+        },
+        {
+          t: "Giao thức mạng",
+          q: "Phương thức truy cập (Access Method) xác định điều gì?",
+          a: [
+            "Địa chỉ IP của thiết bị",
+            "Thời điểm ai đó có thể gửi tin nhắn trên kênh truyền",
+            "Kích thước tối đa của gói tin",
+            "Giao thức mã hóa sử dụng",
+          ],
+          c: 1,
+        },
+        {
+          t: "Giao thức mạng",
+          q: "Xung đột thông tin (Collision) xảy ra khi:",
+          a: [
+            "Thiết bị mất kết nối",
+            "Hai thiết bị cùng truyền trên kênh truyền chia sẻ cùng một lúc",
+            "Gói tin bị mất trên đường truyền",
+            "Bandwidth vượt quá giới hạn",
+          ],
+          c: 1,
+        },
+        {
+          t: "Giao thức mạng",
+          q: "Unicast là phương thức truyền thông trong đó:",
+          a: [
+            "Thông tin truyền đến tất cả thiết bị",
+            "Thông tin truyền đến một nhóm thiết bị",
+            "Thông tin truyền đến một thiết bị đầu cuối duy nhất",
+            "Thông tin quảng bá trên toàn mạng",
+          ],
+          c: 2,
+        },
+        {
+          t: "Giao thức mạng",
+          q: "Multicast là phương thức truyền thông trong đó:",
+          a: [
+            "Thông tin truyền đến một thiết bị duy nhất",
+            "Thông tin truyền đến một hoặc nhiều thiết bị đầu cuối trong một nhóm",
+            "Thông tin truyền đến tất cả thiết bị trong mạng",
+            "Thông tin truyền đến thiết bị gần nhất",
+          ],
+          c: 1,
+        },
+        {
+          t: "Giao thức mạng",
+          q: "Broadcast là phương thức truyền thông trong đó:",
+          a: [
+            "Thông tin truyền đến một thiết bị",
+            "Thông tin truyền đến một nhóm thiết bị",
+            "Thông tin truyền đến tất cả các thiết bị đầu cuối",
+            "Thông tin truyền ngẫu nhiên",
+          ],
+          c: 2,
+        },
+        {
+          t: "Giao thức mạng",
+          q: "Khi thiết bị WLAN muốn truyền dữ liệu, NIC cần:",
+          a: [
+            "Chỉ cần kết nối vật lý",
+            "Xác định xem phương tiện không dây có khả dụng hay không",
+            "Yêu cầu địa chỉ IP mới",
+            "Thiết lập kết nối với tất cả thiết bị khác",
+          ],
+          c: 1,
+        },
+        {
+          t: "Giao thức mạng",
+          q: "Giao thức định nghĩa những điều gì?",
+          a: [
+            "Chỉ định nghĩa tốc độ truyền dữ liệu",
+            "Khuôn dạng, ngữ nghĩa, thứ tự thông điệp và hành vi khi trao đổi thông điệp",
+            "Chỉ định nghĩa địa chỉ mạng",
+            "Loại phần cứng được sử dụng",
+          ],
+          c: 1,
+        },
+        {
+          t: "Giao thức mạng",
+          q: "Chồng giao thức (Protocol Stack) là:",
+          a: [
+            "Một giao thức duy nhất bao gồm tất cả chức năng",
+            "Ngăn xếp các giao thức truyền thông trên kiến trúc phân lớp",
+            "Phần mềm quản lý mạng",
+            "Danh sách thiết bị trong mạng",
+          ],
+          c: 1,
+        },
+        {
+          t: "Giao thức mạng",
+          q: "Truyền thông hướng liên kết (Connection-oriented) có đặc điểm:",
+          a: [
+            "Không cần thiết lập liên kết trước",
+            "Có ba giai đoạn: Thiết lập liên kết, Truyền dữ liệu, Hủy liên kết",
+            "Truyền ngay không cần thỏa thuận",
+            "Không đảm bảo tin cậy",
+          ],
+          c: 1,
+        },
+        {
+          t: "Giao thức mạng",
+          q: "Truyền thông hướng không liên kết (Connectionless) có đặc điểm:",
+          a: [
+            "Tin cậy cao nhất",
+            "Có ba giai đoạn giống hướng liên kết",
+            "Không thiết lập liên kết trước, chỉ có giai đoạn truyền dữ liệu, 'Best effort'",
+            "Đảm bảo toàn vẹn dữ liệu",
+          ],
+          c: 2,
+        },
+        {
+          t: "Giao thức mạng",
+          q: "'Best effort' trong truyền thông hướng không liên kết nghĩa là:",
+          a: [
+            "Truyền với chất lượng tốt nhất đảm bảo",
+            "Truyền ngay với khả năng tối đa, không đảm bảo tin cậy",
+            "Truyền khi có băng thông dự phòng",
+            "Truyền sau khi kiểm tra kênh",
+          ],
+          c: 1,
+        },
+
+        // ── PHẦN 5: LỊCH SỬ INTERNET (191-240) ───────
+        {
+          t: "Lịch sử Internet",
+          q: "Năm 1961, Kleinrock đã có đóng góp gì cho lịch sử mạng máy tính?",
+          a: [
+            "Phát minh ra TCP/IP",
+            "Lý thuyết hàng đợi chứng minh hiệu quả của chuyển mạch gói",
+            "Xây dựng ARPANET",
+            "Phát minh ra email",
+          ],
+          c: 1,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "Năm 1964, Baran có đóng góp gì?",
+          a: [
+            "Phát minh ra Ethernet",
+            "Nghiên cứu chuyển mạch gói ứng dụng trong mạng quân sự",
+            "Tạo ra giao thức NCP",
+            "Xây dựng mạng ALOHAnet",
+          ],
+          c: 1,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "ARPANET được xây dựng vào năm nào và bởi ai?",
+          a: [
+            "1969 – Bộ Quốc phòng Mỹ",
+            "1972 – IBM",
+            "1974 – AT&T",
+            "1979 – MIT",
+          ],
+          c: 0,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "ARPANET là tiền thân của:",
+          a: ["World Wide Web", "TCP/IP", "Internet", "Ethernet"],
+          c: 2,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "Mạng ALOHAnet satellite được xây dựng năm nào và ở đâu?",
+          a: [
+            "1969 tại California",
+            "1970 tại Hawaii",
+            "1972 tại New York",
+            "1974 tại Anh",
+          ],
+          c: 1,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "Giao thức host-host đầu tiên trên ARPANET là:",
+          a: ["TCP/IP", "FTP", "NCP (Network Control Protocol)", "HTTP"],
+          c: 2,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "Ai là người phát minh ra Email?",
+          a: ["Vinton Cerf", "Bob Kahn", "Metcalfe", "Ray Tomlinson"],
+          c: 3,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "Năm 1972, ARPAnet có bao nhiêu nút?",
+          a: ["5", "10", "15", "20"],
+          c: 2,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "Luận văn tiến sỹ của Metcalfe vào năm 1973 đề xuất:",
+          a: [
+            "Giao thức TCP/IP",
+            "Mạng Ethernet",
+            "World Wide Web",
+            "Domain Name System",
+          ],
+          c: 1,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "Giao thức TCP/IP được tạo ra bởi ai và vào năm nào?",
+          a: [
+            "Ray Tomlinson, 1972",
+            "Metcalfe, 1973",
+            "Vinton Cerf và Bob Kahn, 1974",
+            "Kleinrock, 1961",
+          ],
+          c: 2,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "Thuật ngữ 'Internet' xuất hiện vào năm nào?",
+          a: ["1969", "1972", "1974", "1979"],
+          c: 2,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "Dịch vụ truyền tệp FTP được phát minh vào năm nào và bởi ai?",
+          a: [
+            "1969 – DARPA",
+            "1974 – Vinton Cerf",
+            "1976 – phòng thí nghiệm AT&T",
+            "1983 – ARPANET",
+          ],
+          c: 2,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "Năm 1979, ARPAnet có bao nhiêu nút?",
+          a: ["50", "100", "200", "500"],
+          c: 2,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "Năm 1982, TCP/IP được:",
+          a: [
+            "Phát minh lần đầu",
+            "Áp dụng làm giao thức chuẩn cho mạng ARPANET",
+            "Thay thế bởi NCP",
+            "Hủy bỏ",
+          ],
+          c: 1,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "Năm 1983, ARPANET được tách thành mấy phần?",
+          a: ["1", "2", "3", "4"],
+          c: 1,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "Mạng NSFnet xuất phát từ phần nào của ARPANET sau khi tách năm 1983?",
+          a: [
+            "Phần dùng cho mạng dữ liệu quốc phòng",
+            "Phần mở rộng",
+            "Phần dùng cho nghiên cứu khoa học",
+            "Phần dùng cho giáo dục",
+          ],
+          c: 1,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "Thời kỳ bùng nổ lần 1 của Internet (1986-1990) gắn liền với sự xuất hiện của:",
+          a: [
+            "World Wide Web",
+            "Mạng NSFnet",
+            "Thương mại hóa Web",
+            "Instant messaging",
+          ],
+          c: 1,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "Thời kỳ bùng nổ lần 2 của Internet (1991-1996) gắn liền với:",
+          a: ["Mạng NSFnet", "ARPANET", "World Wide Web (WWW)", "Mạng vệ tinh"],
+          c: 2,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "Cuối những năm 1990 đến 2000, Internet có khoảng bao nhiêu host và người dùng?",
+          a: [
+            "5 triệu host, 10 triệu người dùng",
+            "50 triệu host, hơn 100 triệu người dùng",
+            "100 triệu host, 500 triệu người dùng",
+            "1 tỷ host, 1 tỷ người dùng",
+          ],
+          c: 1,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "Việt Nam chính thức kết nối Internet vào ngày tháng năm nào?",
+          a: ["1/1/1997", "19/11/1997", "19/11/1996", "1/1/2000"],
+          c: 1,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "ISP Internet đầu tiên của Việt Nam là:",
+          a: ["FPT", "Viettel", "VNPT", "Netnam"],
+          c: 2,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "Tốc độ kết nối Internet ban đầu của Việt Nam năm 1997 là:",
+          a: ["64kbps", "128kbps", "1Mbps", "10Mbps"],
+          c: 0,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "Năm 2007, 'Mười năm Internet Việt Nam' có bao nhiêu ISP và IXP?",
+          a: [
+            "4 ISP, 1 IXP",
+            "10 ISP, 2 IXP",
+            "20 ISP, 4 IXP",
+            "50 ISP, 10 IXP",
+          ],
+          c: 2,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "Năm 2007, tỷ lệ dân số Việt Nam sử dụng Internet là:",
+          a: ["5%", "10%", "22.04%", "50%"],
+          c: 2,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "VNNIC là:",
+          a: [
+            "Nhà cung cấp Internet lớn nhất Việt Nam",
+            "Đơn vị quản lý cấp phát tài nguyên địa chỉ Internet quốc gia tại VN",
+            "Tổ chức quản lý tên miền quốc tế",
+            "Công ty viễn thông nhà nước",
+          ],
+          c: 1,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "IXP viết tắt của:",
+          a: [
+            "Internet eXchange Protocol",
+            "Internet eXchange Point",
+            "Internal eXchange Provider",
+            "Internet eXclusive Provider",
+          ],
+          c: 1,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "ISP viết tắt của:",
+          a: [
+            "Internet Service Protocol",
+            "Internet Service Point",
+            "Internet Service Provider",
+            "Internal Service Provider",
+          ],
+          c: 2,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "ISP được cấp cổng truy cập vào Internet bởi:",
+          a: ["Người dùng cuối", "ICP", "IAP", "OSP"],
+          c: 2,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "ICP (Internet Content Provider) cung cấp:",
+          a: [
+            "Đường truyền kết nối Internet",
+            "Các thông tin kinh tế, giáo dục, thể thao, chính trị đưa lên mạng",
+            "Thiết bị phần cứng mạng",
+            "Dịch vụ kết nối VPN",
+          ],
+          c: 1,
+        },
+        {
+          t: "Lịch sử Internet",
+          q: "OSP (Online Service Provider) cung cấp:",
+          a: [
+            "Đường truyền vật lý",
+            "Dịch vụ trên cơ sở ứng dụng Internet như mua bán qua mạng, giao dịch ngân hàng",
+            "Phần cứng mạng",
+            "Tên miền Internet",
+          ],
+          c: 1,
+        },
+
+        // ── PHẦN 6: PHÂN LOẠI MẠNG THEO QUY MÔ (241-300) ─
+        {
+          t: "Phân loại mạng",
+          q: "Mạng LAN (Local Area Network) thường phủ sóng trong phạm vi:",
+          a: [
+            "Toàn thế giới",
+            "Một quốc gia",
+            "Một tòa nhà hoặc khu vực nhỏ (~10m đến vài km)",
+            "Một châu lục",
+          ],
+          c: 2,
+        },
+        {
+          t: "Phân loại mạng",
+          q: "Mạng MAN (Metropolitan Area Network) thường phủ sóng trong phạm vi:",
+          a: [
+            "Vài mét đến 1km",
+            "Trong một thành phố (~10km đến <100km)",
+            "Trong một quốc gia",
+            "Toàn cầu",
+          ],
+          c: 1,
+        },
+        {
+          t: "Phân loại mạng",
+          q: "Mạng WAN (Wide Area Network) thường phủ sóng trong phạm vi:",
+          a: [
+            "Vài mét",
+            "Một thành phố",
+            "Một quốc gia hay một châu lục (~100km đến ~1000km)",
+            "Toàn thế giới",
+          ],
+          c: 2,
+        },
+        {
+          t: "Phân loại mạng",
+          q: "GAN viết tắt của:",
+          a: [
+            "Global Area Network – Mạng toàn cầu",
+            "General Area Network",
+            "Government Area Network",
+            "Grid Area Network",
+          ],
+          c: 0,
+        },
+        {
+          t: "Phân loại mạng",
+          q: "Hai loại mạng phổ biến nhất hiện nay là:",
+          a: ["MAN và GAN", "LAN và WAN", "WAN và GAN", "LAN và MAN"],
+          c: 1,
+        },
+        {
+          t: "Phân loại mạng",
+          q: "Đặc điểm của mạng LAN là:",
+          a: [
+            "Quản lý bởi nhiều nhà cung cấp dịch vụ",
+            "Cung cấp tốc độ truyền thấp",
+            "Kết nối thiết bị trong khu vực hạn chế, thường quản lý bởi một tổ chức, cung cấp băng thông cao",
+            "Kết nối các mạng LAN trên phạm vi rộng",
+          ],
+          c: 2,
+        },
+        {
+          t: "Phân loại mạng",
+          q: "Đặc điểm của mạng WAN là:",
+          a: [
+            "Quản lý bởi một cá nhân",
+            "Cung cấp băng thông tốc độ cao giữa các thiết bị cùng tòa nhà",
+            "Kết nối các LAN trên khu vực rộng, quản lý bởi nhiều SP/ISP, tốc độ thấp hơn LAN",
+            "Chỉ dùng cáp quang",
+          ],
+          c: 2,
+        },
+        {
+          t: "Phân loại mạng",
+          q: "Internet là:",
+          a: [
+            "Một mạng LAN rất lớn",
+            "Tập hợp các mạng LAN và WAN được kết nối trên toàn thế giới",
+            "Mạng WAN của một quốc gia",
+            "Dịch vụ của một công ty duy nhất",
+          ],
+          c: 1,
+        },
+        {
+          t: "Phân loại mạng",
+          q: "Internet thuộc sở hữu của:",
+          a: [
+            "Chính phủ Mỹ",
+            "Các tập đoàn công nghệ lớn",
+            "Không thuộc sở hữu của bất kỳ cá nhân hay nhóm nào",
+            "Tổ chức LHQ",
+          ],
+          c: 2,
+        },
+        {
+          t: "Phân loại mạng",
+          q: "Tổ chức nào giúp duy trì cấu trúc Internet? (Chọn nhóm đúng nhất)",
+          a: [
+            "VNNIC, FPT, Viettel",
+            "IETF, ICANN, IAB",
+            "IEEE, ISO, ANSI",
+            "WHO, WTO, IMF",
+          ],
+          c: 1,
+        },
+        {
+          t: "Phân loại mạng",
+          q: "Intranet là:",
+          a: [
+            "Mạng công cộng kết nối toàn thế giới",
+            "Tập hợp riêng gồm các mạng LAN và WAN nội bộ của một tổ chức",
+            "Mạng kết nối đối tác bên ngoài",
+            "Dịch vụ Internet tốc độ cao",
+          ],
+          c: 1,
+        },
+        {
+          t: "Phân loại mạng",
+          q: "Ai có thể truy cập Intranet?",
+          a: [
+            "Tất cả mọi người có kết nối Internet",
+            "Chỉ các thành viên của tổ chức hoặc những người được ủy quyền",
+            "Chỉ các nhà quản trị mạng",
+            "Chỉ người dùng trong cùng quốc gia",
+          ],
+          c: 1,
+        },
+        {
+          t: "Phân loại mạng",
+          q: "Extranet là:",
+          a: [
+            "Mạng nội bộ mở rộng ra toàn Internet",
+            "Truy cập an toàn vào mạng tổ chức cho các cá nhân từ tổ chức khác có nhu cầu",
+            "Phiên bản nâng cấp của Intranet",
+            "Mạng kết nối nhiều văn phòng chi nhánh",
+          ],
+          c: 1,
+        },
+        {
+          t: "Phân loại mạng",
+          q: "Các mạng hiện đại khác nhau về:",
+          a: [
+            "Chỉ về tốc độ",
+            "Kích thước bao phủ, số người dùng, số lượng dịch vụ, khu vực trách nhiệm",
+            "Chỉ về loại thiết bị phần cứng",
+            "Chỉ về giao thức sử dụng",
+          ],
+          c: 1,
+        },
+        {
+          t: "Phân loại mạng",
+          q: "Small Home Networks phục vụ mục đích:",
+          a: [
+            "Kết nối hàng nghìn máy tính",
+            "Kết nối một vài máy tính với nhau và với Internet",
+            "Kết nối các văn phòng chi nhánh toàn quốc",
+            "Cung cấp dịch vụ Internet cho công chúng",
+          ],
+          c: 1,
+        },
+        {
+          t: "Phân loại mạng",
+          q: "SOHO viết tắt của gì và phục vụ ai?",
+          a: [
+            "Small Office High Output – doanh nghiệp lớn",
+            "Small Office/Home Office – cho phép máy tính nhà/văn phòng nhỏ kết nối mạng công ty",
+            "Some Other Home Office – không xác định",
+            "Standard Office Home Operations – văn phòng lớn",
+          ],
+          c: 1,
+        },
+        {
+          t: "Phân loại mạng",
+          q: "World Wide Networks kết nối:",
+          a: [
+            "Chỉ các mạng LAN trong một thành phố",
+            "Hàng trăm triệu máy tính trên toàn thế giới",
+            "Chỉ các văn phòng của một công ty đa quốc gia",
+            "Tối đa 1000 máy tính",
+          ],
+          c: 1,
+        },
+        {
+          t: "Phân loại mạng",
+          q: "Mạng biên (Network Edge) bao gồm:",
+          a: [
+            "Chỉ các thiết bị router và switch",
+            "Nút mạng đầu cuối (host) và mạng truy nhập",
+            "Chỉ đường truyền cáp quang",
+            "Các thiết bị tại trung tâm dữ liệu",
+          ],
+          c: 1,
+        },
+        {
+          t: "Phân loại mạng",
+          q: "Mạng lõi (Network Core) bao gồm:",
+          a: [
+            "Chỉ các máy chủ web",
+            "Đường truyền và thiết bị kết nối – mạng của các mạng",
+            "Chỉ thiết bị người dùng cuối",
+            "Chỉ các ISP cấp 1",
+          ],
+          c: 1,
+        },
+        {
+          t: "Phân loại mạng",
+          q: "Nút mạng đầu cuối (End System/Host) bao gồm thiết bị nào?",
+          a: [
+            "Chỉ router và switch",
+            "PC, điện thoại, máy chủ, máy tính nhúng",
+            "Chỉ máy chủ web và email",
+            "Thiết bị chuyển mạch trong mạng lõi",
+          ],
+          c: 1,
+        },
+
+        // ── PHẦN 7: KỸ THUẬT TRUYỀN (301-370) ────────
+        {
+          t: "Kỹ thuật truyền",
+          q: "Băng thông (Bandwidth) trong mạng được định nghĩa là:",
+          a: [
+            "Độ dài của đường cáp",
+            "Lượng dữ liệu truyền tối đa trong một đơn vị thời gian (bps)",
+            "Thời gian thiết lập kết nối",
+            "Số lượng gói tin trong hàng đợi",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Trễ truyền tải (Transmission delay) được tính bằng công thức:",
+          a: [
+            "Độ dài liên kết / Tốc độ tín hiệu",
+            "Kích thước dữ liệu / Băng thông",
+            "Kích thước dữ liệu × Băng thông",
+            "Tốc độ tín hiệu / Độ dài liên kết",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Trễ truyền dẫn (Propagation delay) được tính bằng công thức:",
+          a: [
+            "Kích thước dữ liệu / Băng thông",
+            "Độ dài liên kết / Tốc độ tín hiệu (~2×10⁸ m/s)",
+            "Băng thông × Thời gian",
+            "Kích thước gói / Số lượng nút",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Tốc độ tín hiệu trên đường truyền vật lý xấp xỉ là:",
+          a: ["3×10⁸ m/s", "2×10⁸ m/s", "10⁸ m/s", "4×10⁸ m/s"],
+          c: 1,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Ba kỹ thuật phân loại mạng theo phương thức truyền là:",
+          a: [
+            "LAN, MAN, WAN",
+            "Chuyển mạch kênh, chuyển mạch thông báo, chuyển mạch gói",
+            "Star, Bus, Ring",
+            "Hướng liên kết, không liên kết, quảng bá",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Mạng chuyển mạch kênh (Circuit Switching) hoạt động bằng cách:",
+          a: [
+            "Chia dữ liệu thành các gói nhỏ và định tuyến độc lập",
+            "Cấp phát tài nguyên đường truyền dành riêng cho từng kết nối logic giữa 2 nút",
+            "Lưu trữ và chuyển tiếp toàn bộ thông báo",
+            "Broadcast đến tất cả nút trong mạng",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Ví dụ điển hình của mạng chuyển mạch kênh là:",
+          a: ["Internet", "Mạng điện thoại truyền thống", "Mạng WiFi", "Email"],
+          c: 1,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Ba giai đoạn của mạng chuyển mạch kênh là:",
+          a: [
+            "Thiết lập, Truyền, Hủy kênh truyền",
+            "Mã hóa, Truyền, Giải mã",
+            "Định tuyến, Lưu trữ, Chuyển tiếp",
+            "Yêu cầu, Phản hồi, Xác nhận",
+          ],
+          c: 0,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Ưu điểm của chuyển mạch kênh là:",
+          a: [
+            "Hiệu quả sử dụng băng thông cao",
+            "Không có độ trễ khi thiết lập xong kênh, đảm bảo chất lượng dịch vụ cho ứng dụng real-time",
+            "Chi phí thấp",
+            "Khả năng chịu lỗi cao",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Nhược điểm của chuyển mạch kênh là:",
+          a: [
+            "Không hỗ trợ thoại",
+            "Sử dụng kênh không hiệu quả khi kênh rỗi, các thiết bị khác không dùng được",
+            "Không thể thiết lập kết nối",
+            "Tốc độ truyền chậm",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Trong chuyển mạch kênh, kênh truyền được giữ cho đến khi:",
+          a: [
+            "Hết thời gian timeout",
+            "Kết thúc phiên trao đổi giữa hai nút",
+            "Lỗi trên đường truyền",
+            "Một trong hai nút bị ngắt điện",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Nếu thiết bị chuyển mạch bị lỗi trong khi truyền (Circuit Switching), điều gì xảy ra?",
+          a: [
+            "Kênh tự tìm đường thay thế",
+            "Phải bắt đầu lại toàn bộ quá trình từ đầu",
+            "Dữ liệu được lưu trữ tạm thời và tiếp tục sau",
+            "Thiết bị khác tự tiếp nhận",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Mạng chuyển mạch thông báo (Message Switching) có đặc điểm:",
+          a: [
+            "Thiết lập liên kết dành riêng cho mỗi kết nối",
+            "Mỗi thông báo là khối độc lập có địa chỉ nguồn và đích, truyền qua store-and-forward",
+            "Chia dữ liệu thành các gói nhỏ",
+            "Không lưu trữ trung gian",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Mạng chuyển mạch thông báo còn được gọi là:",
+          a: [
+            "Circuit-switched network",
+            "Packet-switched network",
+            "Store-and-forward network",
+            "Broadcast network",
+          ],
+          c: 2,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Ưu điểm của chuyển mạch thông báo so với chuyển mạch kênh là:",
+          a: [
+            "Độ trễ thấp hơn",
+            "Quản lý hiệu quả hơn, giảm tắc nghẽn, tăng hiệu quả sử dụng kênh",
+            "Phù hợp hơn cho ứng dụng real-time",
+            "Chi phí thấp hơn",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Nhược điểm của chuyển mạch thông báo là:",
+          a: [
+            "Không hỗ trợ địa chỉ đích",
+            "Độ trễ cao không phù hợp với real-time, thiết bị trung gian cần bộ nhớ rất lớn",
+            "Chi phí cao hơn chuyển mạch kênh",
+            "Không thể chuyển tiếp thông báo",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Mạng chuyển mạch gói (Packet Switching) khác chuyển mạch thông báo ở điểm nào?",
+          a: [
+            "Không dùng store-and-forward",
+            "Dữ liệu được chia thành các gói nhỏ, mỗi gói định tuyến độc lập",
+            "Không cần địa chỉ nguồn và đích",
+            "Chỉ dùng một đường truyền duy nhất",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Trong chuyển mạch gói, mỗi gói tin có phần thông tin điều khiển bao gồm:",
+          a: [
+            "Chỉ địa chỉ đích",
+            "Header và trailer chứa địa chỉ nguồn, địa chỉ đích và thông tin khác",
+            "Chỉ dữ liệu người dùng",
+            "Chữ ký số của người gửi",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Ưu điểm của chuyển mạch gói so với chuyển mạch kênh về sử dụng băng thông:",
+          a: [
+            "Chuyển mạch gói kém hiệu quả hơn",
+            "Nhiều liên kết có thể chia sẻ một kênh truyền, tăng hiệu quả sử dụng băng thông",
+            "Chuyển mạch gói cần băng thông lớn hơn",
+            "Chúng như nhau về hiệu quả băng thông",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Trong chuyển mạch gói, các gói có thể:",
+          a: [
+            "Chỉ đi theo một đường duy nhất",
+            "Đến đích không theo thứ tự gửi ban đầu",
+            "Không bao giờ bị thất lạc",
+            "Chỉ do một thiết bị xử lý",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Khi các gói tin đến đích không theo thứ tự, bên nhận phải:",
+          a: [
+            "Yêu cầu gửi lại tất cả",
+            "Sắp xếp lại các gói và khôi phục các gói thất lạc",
+            "Bỏ qua thứ tự, sử dụng ngay",
+            "Chờ đến hết timeout",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Trong chuyển mạch gói, tại mỗi nút trung gian, gói tin được:",
+          a: [
+            "Truyền ngay lập tức không lưu trữ",
+            "Nhận, lưu trữ tạm thời, rồi chuyển tiếp (store & forward)",
+            "Mã hóa lại",
+            "Chia nhỏ thêm",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Định tuyến (Routing) trong mạng chuyển mạch là:",
+          a: [
+            "Mã hóa dữ liệu trước khi truyền",
+            "Xác định đường đi cho dữ liệu từ nguồn đến đích",
+            "Kiểm soát tốc độ truyền",
+            "Quản lý địa chỉ IP",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Mạng Internet sử dụng kỹ thuật truyền nào?",
+          a: [
+            "Chuyển mạch kênh",
+            "Chuyển mạch thông báo",
+            "Chuyển mạch gói",
+            "Quảng bá",
+          ],
+          c: 2,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Kết nối Cable Internet có đặc điểm:",
+          a: [
+            "Tốc độ thấp, không liên tục",
+            "Băng thông cao, always on, cung cấp bởi nhà cung cấp truyền hình cáp",
+            "Chỉ dùng qua đường điện thoại",
+            "Sử dụng vệ tinh",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "DSL viết tắt của:",
+          a: [
+            "Data Service Line",
+            "Digital Subscriber Line",
+            "Direct Service Link",
+            "Dynamic Switching Line",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Kết nối Dial-up telephone có đặc điểm:",
+          a: [
+            "Tốc độ cao, chi phí thấp",
+            "Băng thông cao, always on",
+            "Chi phí thấp, băng thông thấp, dùng modem",
+            "Không dây, tiện lợi",
+          ],
+          c: 2,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Satellite Internet có ưu điểm chính là:",
+          a: [
+            "Tốc độ nhanh nhất",
+            "Lợi ích lớn cho vùng nông thôn không có ISP",
+            "Chi phí rẻ nhất",
+            "Độ trễ thấp nhất",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Mạng hội tụ (Converging Network) mang lại lợi ích gì?",
+          a: [
+            "Cần nhiều loại cáp khác nhau",
+            "Cung cấp data, voice và video trên cùng một cơ sở hạ tầng mạng với cùng bộ quy tắc",
+            "Tăng chi phí vận hành",
+            "Yêu cầu nhiều đường truyền riêng biệt",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kỹ thuật truyền",
+          q: "Trước khi có mạng hội tụ, tổ chức cần:",
+          a: [
+            "Một đường truyền chung cho tất cả dịch vụ",
+            "Đi cáp riêng cho điện thoại, video và dữ liệu với công nghệ khác nhau",
+            "Chỉ cần một loại cáp duy nhất",
+            "Sử dụng hoàn toàn công nghệ không dây",
+          ],
+          c: 1,
+        },
+
+        // ── PHẦN 8: KIẾN TRÚC PHÂN LỚP (371-430) ────
+        {
+          t: "Kiến trúc phân lớp",
+          q: "Tại sao cần sử dụng mô hình phân lớp để mô tả mạng?",
+          a: [
+            "Vì luật pháp yêu cầu",
+            "Để mô đun hóa hoạt động mạng thành các lớp có thể quản lý được",
+            "Để tăng tốc độ mạng",
+            "Vì các nhà sản xuất yêu cầu",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc phân lớp",
+          q: "Lợi ích nào sau đây KHÔNG thuộc về kiến trúc phân lớp?",
+          a: [
+            "Hỗ trợ thiết kế giao thức",
+            "Thúc đẩy cạnh tranh giữa các nhà cung cấp",
+            "Cung cấp ngôn ngữ chung để mô tả chức năng mạng",
+            "Tăng tốc độ truyền dữ liệu vật lý",
+          ],
+          c: 3,
+        },
+        {
+          t: "Kiến trúc phân lớp",
+          q: "Hai mô hình phân lớp phổ biến nhất để mô tả hoạt động mạng là:",
+          a: ["TCP/IP và HTTP", "OSI và TCP/IP", "LAN và WAN", "IPv4 và IPv6"],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc phân lớp",
+          q: "SAP (Service Access Point) là gì?",
+          a: [
+            "Thiết bị phát sóng WiFi",
+            "Điểm trừu tượng tại đó lớp trên sử dụng dịch vụ lớp dưới",
+            "Địa chỉ vật lý của card mạng",
+            "Cổng kết nối Internet",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc phân lớp",
+          q: "PDU (Protocol Data Unit) bao gồm:",
+          a: [
+            "Chỉ dữ liệu người dùng",
+            "Header chứa địa chỉ và thông tin xử lý, và Payload là dữ liệu cần truyền",
+            "Chỉ header điều khiển",
+            "Chữ ký số và mã xác thực",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc phân lớp",
+          q: "Bên gửi trong kiến trúc phân lớp thực hiện quá trình gì?",
+          a: [
+            "De-encapsulation (mở gói)",
+            "Encapsulation (đóng gói) – thêm tiêu đề và chuyển cho lớp dưới",
+            "Chỉ truyền dữ liệu thô",
+            "Giải mã dữ liệu",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc phân lớp",
+          q: "Bên nhận trong kiến trúc phân lớp thực hiện quá trình gì?",
+          a: [
+            "Encapsulation (đóng gói)",
+            "De-encapsulation – xử lý theo thông tin header, tách header và chuyển lên lớp trên",
+            "Chỉ nhận dữ liệu thô",
+            "Thêm tiêu đề mới",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc phân lớp",
+          q: "Truyền thông giữa các lớp ngang hàng (peer layers) được gọi là:",
+          a: [
+            "Truyền thông vật lý",
+            "Truyền thông logic",
+            "Truyền thông thực",
+            "Truyền thông đơn hướng",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc phân lớp",
+          q: "Nguyên lý 'chia để trị' trong kiến trúc phân lớp áp dụng bằng cách:",
+          a: [
+            "Chia dữ liệu thành nhiều phần nhỏ",
+            "Xác định nhiệm vụ, phân định ai làm gì, tổ chức thứ tự thực hiện",
+            "Tăng số lượng thiết bị mạng",
+            "Giảm kích thước gói tin",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc phân lớp",
+          q: "Lợi ích của kiến trúc phân lớp về mặt kỹ thuật là:",
+          a: [
+            "Giảm hiệu năng mạng",
+            "Dễ dàng thiết kế, triển khai, tái sử dụng và nâng cấp",
+            "Tăng độ phức tạp hệ thống",
+            "Yêu cầu phần cứng đặc biệt",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc phân lớp",
+          q: "Mỗi lớp trong kiến trúc phân lớp:",
+          a: [
+            "Phụ thuộc hoàn toàn vào các lớp khác",
+            "Cung cấp dịch vụ cho lớp trên, sử dụng dịch vụ lớp dưới, độc lập với các lớp còn lại",
+            "Chỉ giao tiếp với lớp vật lý",
+            "Xử lý toàn bộ chức năng mạng",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc phân lớp",
+          q: "Trong kiến trúc phân lớp, lớp trên:",
+          a: [
+            "Không cần quan tâm đến lớp dưới",
+            "Chỉ cần quan tâm cách sử dụng dịch vụ lớp dưới, không quan tâm cách thực hiện",
+            "Kiểm soát hoàn toàn lớp dưới",
+            "Trực tiếp truy cập lớp vật lý",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc phân lớp",
+          q: "Hai cách thức giao thức điều khiển truyền thông logic giữa các lớp đồng cấp là:",
+          a: [
+            "Unicast và Broadcast",
+            "Hướng liên kết và hướng không liên kết",
+            "Đồng bộ và Bất đồng bộ",
+            "Vật lý và Logic",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc phân lớp",
+          q: "Trong truyền thông hướng liên kết, có bao nhiêu giai đoạn?",
+          a: [
+            "1 – Chỉ truyền dữ liệu",
+            "2 – Thiết lập và Hủy liên kết",
+            "3 – Thiết lập liên kết, Truyền dữ liệu, Hủy liên kết",
+            "4 – Yêu cầu, Xác nhận, Truyền, Hủy",
+          ],
+          c: 2,
+        },
+        {
+          t: "Kiến trúc phân lớp",
+          q: "Quan điểm lập trình của SAP tương đương với:",
+          a: [
+            "Biến toàn cục",
+            "Lời gọi hàm (function call) với tên hàm và cách truyền đối số không đổi",
+            "Lớp kế thừa (inheritance)",
+            "Hàm đệ quy",
+          ],
+          c: 1,
+        },
+        {
+          t: "Kiến trúc phân lớp",
+          q: "Trong mô hình phân lớp, PDU tại các lớp đồng cấp:",
+          a: [
+            "Hoàn toàn khác nhau giữa hai bên",
+            "Giống nhau ở hai bên gửi và nhận",
+            "Chỉ giống nhau ở lớp vật lý",
+            "Phụ thuộc vào loại thiết bị",
+          ],
+          c: 1,
+        },
+
+        // ── PHẦN 9: MÔ HÌNH OSI (431-480) ────────────
+        {
+          t: "Mô hình OSI",
+          q: "Mô hình OSI được ISO phát hành chính thức vào năm nào?",
+          a: ["1971", "1978", "1984", "1990"],
+          c: 2,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "ISO viết tắt của:",
+          a: [
+            "Internet Standard Organization",
+            "International Organization of Standard (Standardization)",
+            "Information Systems Office",
+            "Internet Service Operations",
+          ],
+          c: 1,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "Mô hình OSI gồm bao nhiêu lớp?",
+          a: ["4", "5", "6", "7"],
+          c: 3,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "Lớp nào trong OSI chứa các giao thức dùng cho liên lạc process-to-process?",
+          a: [
+            "Lớp 6 – Presentation",
+            "Lớp 5 – Session",
+            "Lớp 4 – Transport",
+            "Lớp 7 – Application",
+          ],
+          c: 3,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "Lớp Presentation (Trình diễn) trong OSI có chức năng:",
+          a: [
+            "Thiết lập và quản lý phiên giao dịch",
+            "Định tuyến gói tin qua mạng",
+            "Cung cấp biểu diễn chung cho dữ liệu: mã hóa, nén, chuyển đổi",
+            "Truyền tải các bit vật lý",
+          ],
+          c: 2,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "Lớp Session trong OSI có chức năng:",
+          a: [
+            "Mã hóa dữ liệu",
+            "Cung cấp dịch vụ để tổ chức đối thoại và quản lý trao đổi dữ liệu",
+            "Định tuyến gói tin",
+            "Truyền tải bit vật lý",
+          ],
+          c: 1,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "Lớp Transport trong OSI có chức năng:",
+          a: [
+            "Quản lý phiên giao dịch",
+            "Xác định dịch vụ phân đoạn, truyền và lắp ráp lại dữ liệu cho giao tiếp end-to-end",
+            "Định tuyến gói tin",
+            "Mã hóa và nén dữ liệu",
+          ],
+          c: 1,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "Lớp Network trong OSI có chức năng:",
+          a: [
+            "Thiết lập phiên giao dịch",
+            "Truyền bit vật lý",
+            "Cung cấp dịch vụ trao đổi các phần dữ liệu qua mạng giữa các thiết bị đầu cuối được xác định",
+            "Định dạng và đóng gói dữ liệu",
+          ],
+          c: 2,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "Lớp Data Link trong OSI có chức năng:",
+          a: [
+            "Mô tả phương thức trao đổi Frame dữ liệu giữa các thiết bị qua phương tiện chung",
+            "Xác định địa chỉ logic (IP)",
+            "Cung cấp dịch vụ cho ứng dụng người dùng",
+            "Truyền bit vật lý",
+          ],
+          c: 0,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "Lớp Physical (Vật lý) trong OSI có chức năng:",
+          a: [
+            "Định tuyến gói tin",
+            "Mô tả phương tiện cơ học, điện, chức năng để kích hoạt/duy trì/hủy kết nối vật lý truyền bit",
+            "Kiểm soát lỗi truyền dữ liệu",
+            "Thiết lập phiên giao dịch",
+          ],
+          c: 1,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "Đơn vị dữ liệu (PDU) ở lớp Data Link là:",
+          a: ["Bit", "Packet", "Frame", "Segment"],
+          c: 2,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "Đơn vị dữ liệu (PDU) ở lớp Physical là:",
+          a: ["Frame", "Packet", "Segment", "Bit"],
+          c: 3,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "Lớp Application trong OSI trình bày:",
+          a: [
+            "Các đặc tả kỹ thuật để giải quyết giao tiếp giữa chương trình ứng dụng với hệ thống mạng",
+            "Cách truyền bit vật lý",
+            "Định tuyến gói tin",
+            "Kiểm soát lỗi truyền dữ liệu",
+          ],
+          c: 0,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "Lớp Presentation hỗ trợ các dạng thức như:",
+          a: [
+            "TCP, UDP, IP",
+            "JPEG, ASCII, GIF, MPEG, Encryption",
+            "HTTP, FTP, SMTP",
+            "Ethernet, WiFi",
+          ],
+          c: 1,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "Lớp Session có chức năng:",
+          a: [
+            "Chỉ mã hóa dữ liệu",
+            "Thiết lập, quản lý, kết thúc các phiên giao dịch và trao đổi dữ liệu giữa các ứng dụng",
+            "Chỉ truyền bit vật lý",
+            "Chỉ định tuyến gói tin",
+          ],
+          c: 1,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "Lớp Transport đảm bảo:",
+          a: [
+            "Định tuyến gói tin qua nhiều mạng",
+            "Độ tin cậy cho các gói tin, đánh thứ tự, ghép/tách dữ liệu, chọn giao thức",
+            "Thiết lập phiên",
+            "Mã hóa dữ liệu",
+          ],
+          c: 1,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "Lớp Network cung cấp thông tin về:",
+          a: [
+            "Chỉ địa chỉ vật lý MAC",
+            "Địa chỉ logic (IP), cơ chế định tuyến, giao thức định tuyến, mạch ảo",
+            "Chỉ tốc độ đường truyền",
+            "Chỉ kiểm soát lỗi",
+          ],
+          c: 1,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "Lớp Data Link trình bày đặc tả kỹ thuật về:",
+          a: [
+            "Địa chỉ IP và định tuyến",
+            "Dạng thức dữ liệu, địa chỉ gửi nhận, cơ chế truy cập đường truyền",
+            "Mã hóa và nén",
+            "Quản lý phiên giao dịch",
+          ],
+          c: 1,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "Lớp Physical trình bày đặc tả về:",
+          a: [
+            "Địa chỉ IP",
+            "Giao thức định tuyến",
+            "Giao tiếp vật lý, đặc tính điện, tốc độ truyền dữ liệu",
+            "Kiểm soát lỗi",
+          ],
+          c: 2,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "Trong mô hình OSI, giao thức hướng liên kết (Connection-Oriented) có đặc điểm:",
+          a: [
+            "Chỉ có giai đoạn truyền dữ liệu",
+            "Các thực thể đồng lớp thiết lập liên kết logic, thương lượng tham số trước khi truyền",
+            "Không kiểm soát lỗi",
+            "Truyền ngay mà không cần thỏa thuận",
+          ],
+          c: 1,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "Giao thức không liên kết (Connectionless) trong OSI:",
+          a: [
+            "Có ba giai đoạn: thiết lập, truyền, hủy",
+            "Dữ liệu truyền độc lập, chỉ có giai đoạn truyền dữ liệu",
+            "Đảm bảo độ tin cậy tuyệt đối",
+            "Cần thiết lập phiên trước",
+          ],
+          c: 1,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "Trong quá trình nhận tại lớp Physical, lớp này thực hiện:",
+          a: [
+            "Kiểm tra địa chỉ IP",
+            "Đồng bộ bit, đặt các mẫu bit trong buffer, thông báo cho lớp Data Link về frame sau khi giải mã",
+            "Khôi phục các đoạn dữ liệu theo thứ tự",
+            "Chuyển đổi dữ liệu",
+          ],
+          c: 1,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "Lớp Data Link kiểm tra gì trong frame nhận được?",
+          a: [
+            "Địa chỉ IP đích",
+            "FCS trong trailer để phát hiện lỗi, sau đó kiểm tra địa chỉ Data Link",
+            "Cổng TCP/UDP",
+            "Số thứ tự gói tin",
+          ],
+          c: 1,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "Lớp Transport khôi phục dữ liệu theo thứ tự đúng nhờ vào:",
+          a: [
+            "Địa chỉ IP",
+            "Thông tin ACK trong header",
+            "Địa chỉ MAC",
+            "Số cổng",
+          ],
+          c: 1,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "Lớp Presentation thực hiện:",
+          a: [
+            "Định tuyến gói tin",
+            "Chuyển đổi dữ liệu cho lớp Application",
+            "Thiết lập phiên giao dịch",
+            "Kiểm tra lỗi vật lý",
+          ],
+          c: 1,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "Mô hình OSI được bắt đầu xây dựng vào năm nào?",
+          a: ["1961", "1969", "1971", "1984"],
+          c: 2,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "Mục tiêu ban đầu của mô hình OSI là:",
+          a: [
+            "Tăng tốc độ truyền mạng",
+            "Nối kết các sản phẩm của các hãng sản xuất khác nhau",
+            "Thay thế TCP/IP",
+            "Bảo mật mạng",
+          ],
+          c: 1,
+        },
+        {
+          t: "Mô hình OSI",
+          q: "Mô hình OSI trên thực tế:",
+          a: [
+            "Được sử dụng rộng rãi trên tất cả hệ thống",
+            "Không được sử dụng trên thực tế, chỉ có ý nghĩa lý thuyết",
+            "Thay thế hoàn toàn TCP/IP",
+            "Chỉ dùng cho mạng nội bộ",
+          ],
+          c: 1,
+        },
+
+        // ── PHẦN 10: MÔ HÌNH TCP/IP (481-500) ────────
+        {
+          t: "Mô hình TCP/IP",
+          q: "Mô hình TCP/IP là kết quả nghiên cứu từ:",
+          a: [
+            "ISO năm 1984",
+            "Mạng ARPANET – mạng chuyển mạch gói thử nghiệm",
+            "IEEE năm 1990",
+            "IETF năm 2000",
+          ],
+          c: 1,
+        },
+        {
+          t: "Mô hình TCP/IP",
+          q: "Bộ giao thức TCP/IP được ban hành theo tiêu chuẩn của:",
+          a: ["ISO", "IEEE", "IAB (Internet Activities Board)", "ANSI"],
+          c: 2,
+        },
+        {
+          t: "Mô hình TCP/IP",
+          q: "Mô hình TCP/IP gồm bao nhiêu lớp?",
+          a: ["3", "4", "5", "7"],
+          c: 1,
+        },
+        {
+          t: "Mô hình TCP/IP",
+          q: "Bốn lớp của mô hình TCP/IP từ trên xuống dưới là:",
+          a: [
+            "Application, Presentation, Session, Transport",
+            "Application, Transport, Internet, Network Access",
+            "Network, Data Link, Physical, Application",
+            "Session, Transport, Network, Physical",
+          ],
+          c: 1,
+        },
+        {
+          t: "Mô hình TCP/IP",
+          q: "Lớp Application trong TCP/IP tương đương với lớp nào trong OSI?",
+          a: [
+            "Chỉ lớp Application (OSI)",
+            "Lớp Application, Presentation và Session (OSI)",
+            "Chỉ lớp Transport (OSI)",
+            "Lớp Network (OSI)",
+          ],
+          c: 1,
+        },
+        {
+          t: "Mô hình TCP/IP",
+          q: "Lớp Internet trong TCP/IP tương đương với lớp nào trong OSI?",
+          a: ["Lớp Transport", "Lớp Network", "Lớp Data Link", "Lớp Session"],
+          c: 1,
+        },
+        {
+          t: "Mô hình TCP/IP",
+          q: "Lớp Network Access trong TCP/IP tương đương với lớp nào trong OSI?",
+          a: [
+            "Application + Presentation",
+            "Transport + Network",
+            "Data Link + Physical",
+            "Session + Transport",
+          ],
+          c: 2,
+        },
+        {
+          t: "Mô hình TCP/IP",
+          q: "Mô hình TCP/IP (Internet model) so với mô hình OSI:",
+          a: [
+            "Có nhiều lớp hơn OSI",
+            "Được sử dụng trên hầu hết các hệ thống mạng thực tế",
+            "Chỉ là mô hình lý thuyết",
+            "Không hỗ trợ Internet",
+          ],
+          c: 1,
+        },
+        {
+          t: "Mô hình TCP/IP",
+          q: "Trong TCP/IP, PDU ở lớp Transport là:",
+          a: ["Frame", "Packet", "Segment", "Bit"],
+          c: 2,
+        },
+        {
+          t: "Mô hình TCP/IP",
+          q: "Trong TCP/IP, PDU ở lớp Internet là:",
+          a: ["Frame", "Packet", "Segment", "Bit"],
+          c: 1,
+        },
+        {
+          t: "Mô hình TCP/IP",
+          q: "Trong quá trình gửi (Encapsulation) trong TCP/IP, thứ tự đóng gói là:",
+          a: [
+            "Application Data → IP → TCP → Network",
+            "Application Data → TCP → IP → Network",
+            "Network → IP → TCP → Application Data",
+            "TCP → IP → Application → Network",
+          ],
+          c: 1,
+        },
+        {
+          t: "Mô hình TCP/IP",
+          q: "Nút mạng đầu cuối trong triển khai thực tế TCP/IP bao gồm các lớp:",
+          a: [
+            "Chỉ Network Access",
+            "Chỉ Internet và Transport",
+            "Đầy đủ tất cả 4 lớp (Application, Transport, Internet, Network Access)",
+            "Chỉ Application và Network Access",
+          ],
+          c: 2,
+        },
+        {
+          t: "Mô hình TCP/IP",
+          q: "Nút mạng trung gian (router, switch) trong TCP/IP thường chỉ triển khai:",
+          a: [
+            "Tất cả 4 lớp",
+            "Lớp Application và Transport",
+            "Các lớp thấp (Network Access, Internet) không bao gồm Application",
+            "Chỉ lớp Application",
+          ],
+          c: 2,
+        },
+        {
+          t: "Mô hình TCP/IP",
+          q: "Mô hình OSI có ý nghĩa lớn về mặt:",
+          a: [
+            "Thực tế triển khai",
+            "Cơ sở lý thuyết – là mô hình tham chiếu chức năng mà các mô hình khác phải tham chiếu",
+            "Bảo mật mạng",
+            "Định tuyến Internet",
+          ],
+          c: 1,
+        },
+        {
+          t: "Mô hình TCP/IP",
+          q: "Sự khác biệt chính giữa OSI và TCP/IP là:",
+          a: [
+            "TCP/IP có nhiều lớp hơn",
+            "OSI là mô hình tham chiếu lý thuyết 7 lớp; TCP/IP là mô hình thực tế 4 lớp được dùng trên Internet",
+            "TCP/IP ra đời trước OSI",
+            "OSI được dùng cho Internet, TCP/IP chỉ dùng cho intranet",
+          ],
+          c: 1,
+        },
+        {
+          t: "Mô hình TCP/IP",
+          q: "Giao thức TCP trong TCP/IP thuộc lớp nào?",
+          a: ["Application", "Transport", "Internet", "Network Access"],
+          c: 1,
+        },
+        {
+          t: "Mô hình TCP/IP",
+          q: "Giao thức IP trong TCP/IP thuộc lớp nào?",
+          a: ["Application", "Transport", "Internet", "Network Access"],
+          c: 2,
+        },
+        {
+          t: "Mô hình TCP/IP",
+          q: "Trong quá trình nhận (De-encapsulation) trong TCP/IP, dữ liệu được xử lý theo thứ tự:",
+          a: [
+            "Application → TCP → IP → Network",
+            "Network → IP → TCP → Application",
+            "IP → TCP → Network → Application",
+            "TCP → IP → Application → Network",
+          ],
+          c: 1,
+        },
+        {
+          t: "Mô hình TCP/IP",
+          q: "VC viết tắt của gì trong mạng máy tính?",
+          a: [
+            "Virtual Connection",
+            "Virtual Circuit – Kênh ảo",
+            "Variable Channel",
+            "Video Conference",
+          ],
+          c: 1,
+        },
+        {
+          t: "Mô hình TCP/IP",
+          q: "MTU viết tắt của:",
+          a: [
+            "Maximum Transfer Unit – Độ dài gói tin cực đại",
+            "Minimum Transfer Unit",
+            "Maximum Transmission Upgrade",
+            "Media Transfer Unit",
+          ],
+          c: 0,
+        },
+      ];
+
+      // ─────────────────────────────────────────────
+      // APP STATE
+      // ─────────────────────────────────────────────
+      let state = {
+        screen: "home", // home | quiz | summary
+        mode: "all", // all | topic
+        topic: null,
+        questions: [],
+        idx: 0,
+        selected: null,
+        answered: false,
+        correct: 0,
+        wrong: 0,
+        skipped: 0,
+        history: [],
+      };
+
+      // ─────────────────────────────────────────────
+      // HELPERS
+      // ─────────────────────────────────────────────
+      function shuffle(arr) {
+        const a = [...arr];
+        for (let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+      }
+
+      function getTopics() {
+        const map = {};
+        QUESTIONS.forEach((q) => {
+          map[q.t] = (map[q.t] || 0) + 1;
+        });
+        return map;
+      }
+
+      function getQuestions(mode, topic) {
+        let pool =
+          mode === "topic" && topic
+            ? QUESTIONS.filter((q) => q.t === topic)
+            : QUESTIONS;
+        return shuffle(pool).map((q, i) => ({
+          ...q,
+          a: shuffle(q.a.map((text, idx) => ({ text, orig: idx }))),
+          num: i + 1,
+        }));
+      }
+
+      // ─────────────────────────────────────────────
+      // RENDER
+      // ─────────────────────────────────────────────
+      const root = document.getElementById("appRoot");
+      const scoreDisplay = document.getElementById("scoreDisplay");
+      const scoreNum = document.getElementById("scoreNum");
+      const progressWrap = document.getElementById("progressWrap");
+      const progressFill = document.getElementById("progressFill");
+      const progressText = document.getElementById("progressText");
+
+      function updateHeader() {
+        if (state.screen === "quiz") {
+          scoreDisplay.style.display = "flex";
+          progressWrap.style.display = "flex";
+          const total = state.correct + state.wrong;
+          scoreNum.textContent = `${state.correct}/${total}`;
+          const pct = state.questions.length
+            ? (state.idx / state.questions.length) * 100
+            : 0;
+          progressFill.style.width = pct + "%";
+          progressText.textContent = `${state.idx} / ${state.questions.length}`;
+        } else {
+          scoreDisplay.style.display = "none";
+          progressWrap.style.display = "none";
+        }
+      }
+
+      function renderHome() {
+        state.screen = "home";
+        updateHeader();
+        const topics = getTopics();
+        const topicKeys = Object.keys(topics);
+
+        root.innerHTML = `
+    <div class="home-screen">
+      <div class="home-title">🖧 Luyện Tập Trắc Nghiệm</div>
+      <div class="home-sub">500 câu hỏi · Chương 1: Tổng quan Mạng Máy Tính<br>Đại học Kinh tế Quốc dân – Khoa CNTT</div>
+
+      <div class="section-title" style="max-width:620px;margin:0 auto 12px">Chế độ luyện tập</div>
+      <div class="mode-grid" id="modeGrid">
+        <div class="mode-card selected" data-mode="all" onclick="selectMode('all')">
+          <div class="mode-icon">🎲</div>
+          <div class="mode-name">Tất cả câu hỏi</div>
+          <div class="mode-desc">500 câu ngẫu nhiên từ toàn bộ nội dung Chương 1</div>
+        </div>
+        <div class="mode-card" data-mode="topic" onclick="selectMode('topic')">
+          <div class="mode-icon">📚</div>
+          <div class="mode-name">Theo chủ đề</div>
+          <div class="mode-desc">Luyện tập tập trung vào từng phần cụ thể</div>
+        </div>
+      </div>
+
+      <div id="topicSection" style="display:none">
+        <div class="section-title" style="max-width:700px;margin:20px auto 12px">Chọn chủ đề</div>
+        <div class="topic-grid" id="topicGrid">
+          ${topicKeys
+            .map(
+              (t) => `
+            <div class="topic-card" data-topic="${t}" onclick="selectTopic('${t}')">
+              <div class="topic-card-name">${t}</div>
+              <div class="topic-card-count">${topics[t]} câu</div>
+            </div>
+          `,
+            )
+            .join("")}
+        </div>
+      </div>
+
+      <button class="btn-start" onclick="startQuiz()">Bắt đầu luyện tập →</button>
+    </div>
+  `;
+        state.mode = "all";
+        state.topic = null;
+      }
+
+      function selectMode(mode) {
+        state.mode = mode;
+        document.querySelectorAll(".mode-card").forEach((el) => {
+          el.classList.toggle("selected", el.dataset.mode === mode);
+        });
+        document.getElementById("topicSection").style.display =
+          mode === "topic" ? "block" : "none";
+        if (mode === "all") state.topic = null;
+      }
+
+      function selectTopic(t) {
+        state.topic = t;
+        document.querySelectorAll(".topic-card").forEach((el) => {
+          el.classList.toggle("selected", el.dataset.topic === t);
+        });
+      }
+
+      function startQuiz() {
+        if (state.mode === "topic" && !state.topic) {
+          alert("Vui lòng chọn một chủ đề!");
+          return;
+        }
+        state.questions = getQuestions(state.mode, state.topic);
+        state.idx = 0;
+        state.correct = 0;
+        state.wrong = 0;
+        state.skipped = 0;
+        state.history = [];
+        state.screen = "quiz";
+        renderQuestion();
+      }
+
+      function renderQuestion() {
+        if (state.idx >= state.questions.length) {
+          renderSummary();
+          return;
+        }
+        const q = state.questions[state.idx];
+        state.selected = null;
+        state.answered = false;
+        updateHeader();
+
+        root.innerHTML = `
+    <div class="topic-tag">📌 ${q.t} · Câu ${q.num}</div>
+    <div class="question-card" id="qCard">
+      <div class="question-num">CÂU ${state.idx + 1} / ${state.questions.length}</div>
+      <div class="question-text">${q.q}</div>
+      <div class="options" id="opts">
+        ${q.a
+          .map(
+            (opt, i) => `
+          <button class="option-btn" id="opt${i}" onclick="selectAnswer(${i})">
+            <span class="option-letter">${String.fromCharCode(65 + i)}</span>
+            <span>${opt.text}</span>
+          </button>
+        `,
+          )
+          .join("")}
+      </div>
+      <div id="feedback"></div>
+    </div>
+    <div class="controls">
+      <button class="btn-next" id="btnNext" onclick="nextQuestion()" style="display:none">Câu tiếp theo →</button>
+      <button class="btn-skip" onclick="skipQuestion()">Bỏ qua</button>
+    </div>
+  `;
+      }
+
+      function selectAnswer(i) {
+        if (state.answered) return;
+        state.answered = true;
+        const q = state.questions[state.idx];
+        state.selected = i;
+        const correctOrigIdx = q.c;
+        const selectedOrig = q.a[i].orig;
+        const isCorrect = selectedOrig === correctOrigIdx;
+
+        // Find the button that corresponds to the correct answer in shuffled order
+        let correctBtn = -1;
+        q.a.forEach((opt, idx) => {
+          if (opt.orig === correctOrigIdx) correctBtn = idx;
+        });
+
+        document
+          .querySelectorAll(".option-btn")
+          .forEach((btn) => (btn.disabled = true));
+        document
+          .getElementById("opt" + i)
+          .classList.add(isCorrect ? "correct" : "wrong");
+        if (!isCorrect) {
+          document
+            .getElementById("opt" + correctBtn)
+            .classList.add("correct-reveal");
+        }
+
+        const feedbackEl = document.getElementById("feedback");
+        feedbackEl.innerHTML = isCorrect
+          ? `<div class="feedback correct"><span class="feedback-icon">✅</span> Chính xác! Câu trả lời đúng.</div>`
+          : `<div class="feedback wrong"><span class="feedback-icon">❌</span> Sai rồi! Đáp án đúng là: <strong>${String.fromCharCode(65 + correctBtn)}. ${q.a[correctBtn].text}</strong></div>`;
+
+        document.getElementById("btnNext").style.display = "block";
+
+        if (isCorrect) state.correct++;
+        else state.wrong++;
+
+        state.history.push({ q: q.q, correct: isCorrect });
+        updateHeader();
+      }
+
+      function nextQuestion() {
+        state.idx++;
+        renderQuestion();
+      }
+
+      function skipQuestion() {
+        state.skipped++;
+        state.idx++;
+        renderQuestion();
+      }
+
+      function renderSummary() {
+        state.screen = "summary";
+        updateHeader();
+        const total = state.correct + state.wrong;
+        const pct = total ? Math.round((state.correct / total) * 100) : 0;
+        let grade =
+          pct >= 90
+            ? "🏆 Xuất sắc!"
+            : pct >= 75
+              ? "⭐ Tốt!"
+              : pct >= 50
+                ? "📖 Cần ôn thêm"
+                : "💪 Hãy cố gắng hơn!";
+        let gradeColor =
+          pct >= 90
+            ? "#10b981"
+            : pct >= 75
+              ? "#f59e0b"
+              : pct >= 50
+                ? "#3b82f6"
+                : "#ef4444";
+
+        root.innerHTML = `
+    <div class="summary-screen">
+      <div class="summary-circle">
+        <div class="summary-pct" style="color:${gradeColor}">${pct}%</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px">Tỷ lệ đúng</div>
+      </div>
+      <div class="summary-title">${grade}</div>
+      <div class="summary-sub">Bạn đã hoàn thành bài luyện tập</div>
+      <div class="summary-stats">
+        <div class="stat-box">
+          <div class="stat-num b">${state.questions.length}</div>
+          <div class="stat-lbl">Tổng câu</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num g">${state.correct}</div>
+          <div class="stat-lbl">Đúng</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num r">${state.wrong}</div>
+          <div class="stat-lbl">Sai</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" style="color:var(--text3)">${state.skipped}</div>
+          <div class="stat-lbl">Bỏ qua</div>
+        </div>
+      </div>
+      <div>
+        <button class="btn-restart" onclick="startQuiz()">🔄 Làm lại (câu mới ngẫu nhiên)</button>
+        <button class="btn-restart" style="background:var(--surface);border:1px solid var(--border);color:var(--text)" onclick="renderHome()">🏠 Trang chủ</button>
+      </div>
+    </div>
+  `;
+      }
+
+      // ─────────────────────────────────────────────
+      // INIT
+      // ─────────────────────────────────────────────
+      renderHome();
+    </script>
+  </body>
+</html>
